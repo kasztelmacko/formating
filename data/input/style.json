@@ -1,0 +1,35 @@
+{
+    "styles": [
+        {
+            "name": "główny",
+            "font": {
+                "name": "Times New Roman",
+                "size": 12,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "color_rgb": "#000000",
+                "highlight": null
+            },
+            "paragraph_format": {
+                "alignment": "JUSTIFY",
+                "left_indent": 1.0,
+                "right_indent": 0.0,
+                "first_line_indent": 2.0,
+                "space_before": 6,
+                "space_after": 6,
+                "line_spacing": 1.5,
+                "keep_with_next": true,
+                "keep_together": false,
+                "widow_control": true
+            }
+        },
+        {
+            "name": "text",
+            "font": {
+                "size": 20
+            },
+            "paragraph_format": {}
+        }
+    ]
+}

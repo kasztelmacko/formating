@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft/2020-12/schema",
+  "title": "Word Styles",
+  "type": "object",
+  "properties": {
+    "styles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "font", "paragraph_format"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "font": {
+            "type": "object",
+            "properties": {
+              "name": { "type": ["string", "null"] },
+              "size": { "type": ["number", "null"] },
+              "bold": { "type": ["boolean", "null"] },
+              "italic": { "type": ["boolean", "null"] },
+              "underline": { "type": ["boolean", "null"] },
+              "color_rgb": {
+                "type": ["string", "null"],
+                "pattern": "^#([0-9a-fA-F]{6})$"
+              },
+              "highlight": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+          },
+          "paragraph_format": {
+            "type": "object",
+            "properties": {
+              "alignment": { "type": ["string", "null"] },
+              "left_indent": { "type": ["number", "null"] },
+              "right_indent": { "type": ["number", "null"] },
+              "first_line_indent": { "type": ["number", "null"] },
+              "space_before": { "type": ["number", "null"] },
+              "space_after": { "type": ["number", "null"] },
+              "line_spacing": { "type": ["number", "null"] },
+              "keep_with_next": { "type": ["boolean", "null"] },
+              "keep_together": { "type": ["boolean", "null"] },
+              "widow_control": { "type": ["boolean", "null"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["styles"],
+  "additionalProperties": false
+}
