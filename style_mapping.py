@@ -1,10 +1,10 @@
 from docx.shared import Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.text import WD_COLOR_INDEX
-from styling_utils import _hex_to_rgbcolor, _resolve_enum, _set_font_name
+from styling_utils import _hex_to_rgbcolor, _resolve_enum
 
 FONT_MAPPING = {
-    "name": ("name", _set_font_name),
+    "name": ("name", None),
     "size": ("size", Pt),
     "bold": ("bold", None),
     "italic": ("italic", None),
