@@ -1,4 +1,5 @@
 from docx.shared import RGBColor
+from docx.oxml.ns import qn
 
 def _apply_properties(target, data, mapping):
     """
@@ -30,3 +31,12 @@ def _hex_to_rgbcolor(hex_str):
 def _resolve_enum(enum_class, name):
     """Get enum value from its name (string)."""
     return getattr(enum_class, name)
+
+def _set_font_name(font, name: str):
+    if not name:
+        return
+    rFonts = font.element.rPr.rFonts
+    rFonts.set(qn("w:eastAsia"), name)
+    rFonts.set(qn("w:ascii"), name)
+    rFonts.set(qn("w:hAnsi"), name)
+    rFonts.set(qn("w:cs"), name)

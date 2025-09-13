@@ -9,27 +9,58 @@
                 "italic": false,
                 "underline": false,
                 "color_rgb": "#000000",
-                "highlight": null
+                "highlight_color": null
             },
             "paragraph_format": {
                 "alignment": "JUSTIFY",
-                "left_indent": 1.0,
+                "left_indent": 0.0,
                 "right_indent": 0.0,
-                "first_line_indent": 2.0,
-                "space_before": 6,
-                "space_after": 6,
+                "first_line_indent": 1.0,
+                "space_before": 0,
+                "space_after": 0,
                 "line_spacing": 1.5,
-                "keep_with_next": true,
+                "keep_with_next": false,
                 "keep_together": false,
                 "widow_control": true
             }
         },
         {
-            "name": "text",
+            "name": "rozdzial",
+            "based_on": "główny",
             "font": {
-                "size": 12
+                "bold": true,
+                "all_caps": true
             },
-            "paragraph_format": {}
+            "paragraph_format": {
+                "alignment": "CENTER",
+                "space_after": 12,
+                "page_break_before": true,
+                "keep_with_next": true
+            }
+        },
+        {
+            "name": "podrozdzial",
+            "based_on": "główny",
+            "font": {
+                "bold": true
+            },
+            "paragraph_format": {
+                "space_before": 18,
+                "space_after": 18,
+                "keep_with_next": true
+            }
+        },
+        {
+            "name": "pod-podrozdzial",
+            "based_on": "główny",
+            "font": {
+                "bold": true
+            },
+            "paragraph_format": {
+                "space_before": 18,
+                "space_after": 18,
+                "keep_with_next": true
+            }
         }
     ]
 }
