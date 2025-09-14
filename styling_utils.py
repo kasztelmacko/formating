@@ -1,5 +1,5 @@
 from docx.shared import RGBColor, Pt
-from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
 
 def _apply_properties(target, data, mapping):
     """
@@ -41,7 +41,6 @@ def _clean_paragraph(paragraph, trim_spaces=True):
     """Remove unnecessary blank lines/spaces from a paragraph."""
     if trim_spaces:
         paragraph.text = paragraph.text.lstrip("\n\r ").rstrip("\n\r ")
-
 
 def _remove_empty_paragraph(paragraph):
     """Remove empty paragraph from the document."""
