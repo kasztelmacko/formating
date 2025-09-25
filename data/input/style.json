@@ -61,18 +61,6 @@
                 "space_after": 18,
                 "keep_with_next": true
             }
-        },
-        {   
-            "name": "bullet_list",
-            "based_on": "główny",
-            "font": {},
-            "paragraph_format": {
-            "first_line_indent": 0.0,
-            "left_indent": 0.5, 
-            "keep_with_next": false
-            },
-            "list_type": "bulleted",
-            "bullet_glyph": "-"
         }
     ]
 }

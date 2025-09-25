@@ -1,7 +1,17 @@
 from docx.shared import Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.text import WD_COLOR_INDEX
-from styling_utils import _hex_to_rgbcolor, _resolve_enum
+from docx.shared import RGBColor
+
+def _hex_to_rgbcolor(hex_str):
+    """Convert '#RRGGBB' string into docx RGBColor."""
+    hex_str = hex_str.lstrip("#")
+    r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
+    return RGBColor(r, g, b)
+
+def _resolve_enum(enum_class, name):
+    """Get enum value from its name (string)."""
+    return getattr(enum_class, name)
 
 FONT_MAPPING = {
     "name": ("name", None),
@@ -24,4 +34,19 @@ PARAGRAPH_FORMAT_MAPPING = {
     "keep_with_next": ("keep_with_next", None),
     "keep_together": ("keep_together", None),
     "widow_control": ("widow_control", None),
+}
+
+BULLET_CHARACTER_OPTIONS = {
+        "bullet": "•",
+        "arrow": "→",
+        "diamond": "♦",
+        "square": "▪",
+        "circle": "○",
+        "dash": "–",
+        "star": "★",
+        "check": "✓"
+}
+
+OPENXML_FORMATS = {
+    "W": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 }
