@@ -1,0 +1,132 @@
+$schema: "http://json-schema.org/draft/2020-12/schema"
+title: "Document Formatter Config"
+type: object
+
+$defs:
+  StyleDefinition:
+    type: object
+    properties:
+      based_on:
+        type: [string, "null"]
+        description: "Optional base style name to inherit from"
+      paragraph_format:
+        type: object
+        properties:
+          alignment: { type: [string, "null"] }
+          left_indent: { type: [number, "null"] }
+          right_indent: { type: [number, "null"] }
+          first_line_indent: { type: [number, "null"] }
+          hanging_indent: { type: [number, "null"] }
+          space_before: { type: [number, "null"] }
+          space_after: { type: [number, "null"] }
+          line_spacing: { type: [number, "null"] }
+          line_spacing_rule: { type: [string, "null"] }
+          keep_with_next: { type: [boolean, "null"] }
+          keep_together: { type: [boolean, "null"] }
+          widow_control: { type: [boolean, "null"] }
+          page_break_before: { type: [boolean, "null"] }
+          tab_stops:
+            type: [array, "null"]
+            items:
+              type: object
+              required: ["position", "alignment"]
+              properties:
+                position: { type: number }
+                alignment: { type: string }
+                leader: { type: [string, "null"] }
+        additionalProperties: false
+      font:
+        type: object
+        properties:
+          name: { type: [string, "null"] }
+          size: { type: [number, "null"] }
+          bold: { type: [boolean, "null"] }
+          italic: { type: [boolean, "null"] }
+          underline: { type: [boolean, string, "null"] }
+          all_caps: { type: [boolean, "null"] }
+          small_caps: { type: [boolean, "null"] }
+          strike: { type: [boolean, "null"] }
+          double_strike: { type: [boolean, "null"] }
+          superscript: { type: [boolean, "null"] }
+          subscript: { type: [boolean, "null"] }
+          hidden: { type: [boolean, "null"] }
+          shadow: { type: [boolean, "null"] }
+          emboss: { type: [boolean, "null"] }
+          imprint: { type: [boolean, "null"] }
+          no_proof: { type: [boolean, "null"] }
+          outline: { type: [boolean, "null"] }
+          complex_script: { type: [boolean, "null"] }
+          cs_bold: { type: [boolean, "null"] }
+          cs_italic: { type: [boolean, "null"] }
+          snap_to_grid: { type: [boolean, "null"] }
+          spec_vanish: { type: [boolean, "null"] }
+          rtl: { type: [boolean, "null"] }
+          highlight_color: { type: [string, "null"], pattern: "^#([0-9a-fA-F]{6})$" }
+          color_rgb: { type: [string, "null"], pattern: "^#([0-9a-fA-F]{6})$" }
+        additionalProperties: true
+    additionalProperties: true
+
+properties:
+  document_formatter_config:
+    type: object
+    properties:
+      document_setup:
+        type: object
+        properties:
+          page_size: { type: string }
+          orientation: { type: string }
+          margins:
+            type: object
+            properties:
+              top: { type: number }
+              bottom: { type: number }
+              left: { type: number }
+              right: { type: number }
+            required: [top, bottom, left, right]
+          default_font:
+            type: object
+            properties:
+              name: { type: string }
+              size: { type: number }
+            required: [name, size]
+        required: [page_size, margins, orientation, default_font]
+
+      paragraph_styles:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/StyleDefinition"
+
+      chapter_and_section_rules:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/StyleDefinition"
+
+      table_rules:
+        type: object
+        properties:
+          caption_style: { $ref: "#/$defs/StyleDefinition" }
+          header_row_style: { $ref: "#/$defs/StyleDefinition" }
+          source_style: { $ref: "#/$defs/StyleDefinition" }
+
+      figure_rules:
+        type: object
+        properties:
+          caption_style: { $ref: "#/$defs/StyleDefinition" }
+          source_style: { $ref: "#/$defs/StyleDefinition" }
+
+      formula_rules:
+        type: object
+        properties:
+          paragraph_format: { $ref: "#/$defs/StyleDefinition/properties/paragraph_format" }
+          font: { $ref: "#/$defs/StyleDefinition/properties/font" }
+          description_list: { type: object }
+
+      list_rules:
+        type: object
+        properties:
+          paragraph_format: { $ref: "#/$defs/StyleDefinition/properties/paragraph_format" }
+          list_item_termination: { type: object }
+          style: { type: string }
+
+required:
+  - document_formatter_config

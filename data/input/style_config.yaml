@@ -1,0 +1,144 @@
+document_formatter_config:
+
+  ## Document-Level Configuration
+  document_setup:
+    page_size: A4
+    margins:
+      top: 2.5
+      bottom: 2.5
+      left: 2.5
+      right: 2.5
+    orientation: Portrait
+    default_font:
+      name: Times New Roman
+      size: 12
+
+  ## Paragraph-Level Configuration
+  paragraph_styles:
+    main_text:
+      paragraph_format:
+        alignment: JUSTIFY
+        line_spacing: 1.5
+        first_line_indent: 1.0
+        space_before: 0
+        space_after: 0
+      font:
+        name: Times New Roman
+        size: 12
+
+  ## Adjustments and Recurring Element Styles
+  chapter_and_section_rules:
+
+    chapter_titles:
+      based_on: main_text
+      apply_to_regex: "^ROZDZIAŁ [IVXLCDM]+\\."
+      paragraph_format:
+        alignment: LEFT
+        page_break_before: true
+        space_after: 12
+      font:
+        all_caps: true
+        bold: true
+        size: 12
+
+    subchapter_titles_level_2:
+      based_on: main_text
+      apply_to_regex: "^[0-9]+\\.[0-9]+\\."
+      paragraph_format:
+        alignment: LEFT
+        space_before: 18
+        space_after: 18
+        hanging_indent: 1.0
+      font:
+        bold: true
+        size: 12
+
+    subchapter_titles_level_3:
+      based_on: main_text
+      apply_to_regex: "^[0-9]+\\.[0-9]+\\.[0-9]+\\."
+      paragraph_format:
+        alignment: LEFT
+        space_before: 18
+        space_after: 18
+      font:
+        bold: false
+        size: 12
+
+  ## Table Rules
+  table_rules:
+    caption_style:
+      apply_to_prefix: "Tabela"
+      position: above
+      numbering: Sequential_Global
+      paragraph_format:
+        alignment: LEFT
+        space_after: 12
+      font:
+        size: 12
+        bold: false
+
+    header_row_style:
+      paragraph_format:
+        alignment: center
+      font:
+        bold: true
+
+    source_style:
+      apply_to_prefix: "Źródło:"
+      position: below
+      paragraph_format:
+        space_before: 12
+      font:
+        size: 10
+        italic: true
+
+  ## Figure Rules
+  figure_rules:
+    caption_style:
+      apply_to_prefix: "Rys."
+      numbering: Sequential_Global
+      paragraph_format:
+        alignment: LEFT
+      font:
+        size: 12
+
+    source_style:
+      apply_to_prefix: "Źródło:"
+      position: below
+      paragraph_format:
+        space_before: 12
+      font:
+        size: 10
+        italic: true
+
+  ## Formula Rules
+  formula_rules:
+    numbering: Sequential_Global
+    number_format: "[1], [2], ..."
+    paragraph_format:
+      alignment: CENTER
+      space_before: 12
+      space_after: 12
+    font:
+      name: Times New Roman
+      size: 12
+      bold: false
+
+    description_list:
+      keyword: "gdzie"
+      keyword_style:
+        paragraph_format:
+          alignment: LEFT
+      list_style:
+        paragraph_format:
+          line_spacing: 1.0
+          first_line_indent: 1.0
+
+  ## Enumerated List Rules
+  list_rules:
+    style: dash
+    paragraph_format:
+      alignment: LEFT
+    list_item_termination:
+      intermediate: none
+      last_item: period

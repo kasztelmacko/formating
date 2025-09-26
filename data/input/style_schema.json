@@ -85,17 +85,7 @@
               }
             },
             "additionalProperties": false
-          },
-
-          "list_type": {
-            "type": ["string", "null"],
-            "enum": ["numbered", "bulleted", null]
-          },
-          "bullet_glyph": {
-            "type": ["string", "null"],
-            "minLength": 1
           }
-
         },
         "additionalProperties": false
       }
