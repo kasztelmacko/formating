@@ -23,7 +23,7 @@ class DocumentFormatterConfig:
         """
         Load a YAML file and return its content as a dictionary.
         """
-        path = os.path.join(input_dir,filename)
+        path = os.path.join(input_dir, filename)
         if not os.path.exists(path):
             raise FileNotFoundError(f"File not found: {path}")
 
@@ -36,7 +36,6 @@ class DocumentFormatterConfig:
     ) -> "DocumentFormatterConfig":
         """
         Load a styles YAML file and validate it against a JSON schema.
-
         Returns an instance of DocumentFormatterConfig if valid.
         """
         style_config = cls.load_yaml_file(input_dir=input_dir, filename=style_filename)
