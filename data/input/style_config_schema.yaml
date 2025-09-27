@@ -89,6 +89,8 @@ properties:
               name: { type: string }
               size: { type: number }
             required: [name, size]
+            trim_spaces:
+              type: boolean
         required: [page_size, margins, orientation, default_font]
 
       paragraph_styles:

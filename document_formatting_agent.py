@@ -1,13 +1,14 @@
 from style_mapping import STYLE_ATTRIBUTES_NAMES_MAPPING, STYLE_NAMES_MAPPING
+from docx import Document
 
 from document_formatter_config import DocumentFormatterConfig
-from styling_utils import apply_docx_style_definitions
-from paragraph_cleaning_utils import clean_paragraph, remove_empty_paragraph
-from bullet_list_styling_util import update_bullet_characters
-from chapter_section_styles_utils import enforce_chapter_page_breaks
+from styling_utils.style_appliers import apply_docx_style_definitions
+from styling_utils.paragraph_cleaning_utils import clean_paragraph, remove_empty_paragraph
+from styling_utils.bullet_list_styling_util import update_bullet_characters
+from styling_utils.chapter_section_styles_utils import enforce_chapter_page_breaks
 
 class DocumentFormattingAgent:
-    def __init__(self, doc, config: DocumentFormatterConfig):
+    def __init__(self, doc: Document, config: DocumentFormatterConfig):
         self.doc = doc
         self.config = config
 
@@ -38,11 +39,12 @@ class DocumentFormattingAgent:
         update_bullet_characters(doc=self.doc, list_config=self.config.list_rules)
         enforce_chapter_page_breaks(doc=self.doc, style_names_mapping=STYLE_NAMES_MAPPING)
 
-    def clean_paragraphs(self, trim_spaces: bool = True):
+    def clean_paragraphs(self):
         """
         Perform paragraph cleanup for all paragraphs in the document:
         trim spaces and remove empty paragraphs.
         """
+        trim_spaces = self.config.document_setup.get("trim_spaces", True)
         for paragraph in self.doc.paragraphs[:]:
             clean_paragraph(paragraph=paragraph, trim_spaces=trim_spaces)
             remove_empty_paragraph(paragraph=paragraph)

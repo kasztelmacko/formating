@@ -12,6 +12,7 @@ document_formatter_config:
     default_font:
       name: Times New Roman
       size: 12
+    trim_spaces: true
 
   ## Paragraph-Level Configuration
   paragraph_styles:

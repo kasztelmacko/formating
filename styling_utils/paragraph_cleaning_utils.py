@@ -18,21 +18,22 @@ def remove_empty_paragraph(paragraph):
 
 def is_paragraph_empty(paragraph) -> bool:
     """
-    Determine if a paragraph is truly empty (no text, no runs, no inline shapes or math).
+    Determine if a paragraph is truly empty (no text, no runs, no inline shapes, pictures, or math).
     """
     if paragraph.text.strip():
         return False
 
+    p_elem = paragraph._element
+    if (
+        p_elem.findall(f".//{{{OPENXML_FORMATS['M']}}}oMath") or
+        p_elem.findall(f".//{{{OPENXML_FORMATS['W']}}}drawing") or
+        p_elem.findall(f".//{{{OPENXML_FORMATS['PIC']}}}pic") or
+        p_elem.findall(f".//{{{OPENXML_FORMATS['V']}}}shape")
+    ):
+        return False
+
     for run in paragraph.runs:
         if run.text.strip():
-            return False
-        if run._element.findall(f".//{{{OPENXML_FORMATS['W']}}}drawing"):
-            return False
-        if run._element.findall(f".//{{{OPENXML_FORMATS['M']}}}oMath"):
-            return False
-        if run._element.findall(f".//{{{OPENXML_FORMATS['PIC']}}}pic"):
-            return False
-        if run._element.findall(f".//{{{OPENXML_FORMATS['V']}}}shape"):
             return False
 
     return True
