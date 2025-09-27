@@ -22,7 +22,6 @@ document_formatter_config:
         first_line_indent: 1.0
         space_before: 0
         space_after: 0
-        keep_with_next: false
         keep_together: false
         widow_control: true
       font:

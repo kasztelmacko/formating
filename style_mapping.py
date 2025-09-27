@@ -13,6 +13,23 @@ def _resolve_enum(enum_class, name):
     """Get enum value from its name (string)."""
     return getattr(enum_class, name)
 
+STYLE_NAMES_MAPPING = {
+    'main_text': 'main_text',
+    'chapter_titles': 'chapter_titles',
+    'subchapter_titles_level_2': 'subchapter_titles_level_2',
+    'subchapter_titles_level_3': 'subchapter_titles_level_3',
+    'caption_style': 'caption_style',
+    'header_row_style': 'header_row_style',
+    'source_style': 'source_style',
+}
+
+STYLE_ATTRIBUTES_NAMES_MAPPING = {
+    'font': 'font',
+    'paragraph_format': 'paragraph_format',
+    'based_on': 'based_on',
+    'apply_to_regex': 'apply_to_regex',
+}
+
 FONT_MAPPING = {
     "name": ("name", None),
     "size": ("size", Pt),

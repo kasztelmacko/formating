@@ -1,13 +1,13 @@
 from style_mapping import FONT_MAPPING, PARAGRAPH_FORMAT_MAPPING
 
-def apply_style_group(doc, style_group: dict):
+def apply_docx_style_definitions(doc, style_definitions: dict, style_attributes_names_mapping: dict):
     """
-    Apply a group of styles from a configuration dictionary to a docx Document.
+    Apply a set of style definitions from a configuration dictionary to a docx Document.
 
-    style_group: dict
+    style_definitions: dict
         Keys are style names, values are style definitions (font + paragraph_format + based_on)
     """
-    for style_name, style_def in style_group.items():
+    for style_name, style_def in style_definitions.items():
         try:
             style_obj = doc.styles[style_name]
         except KeyError:
@@ -16,45 +16,58 @@ def apply_style_group(doc, style_group: dict):
         if not isinstance(style_def, dict):
             continue
 
-        if "based_on" in style_def:
+        if style_attributes_names_mapping["based_on"] in style_def:
             try:
-                style_obj.base_style = doc.styles[style_def["based_on"]]
+                style_obj.base_style = doc.styles[style_def[style_attributes_names_mapping["based_on"]]]
             except KeyError:
                 pass
 
-        apply_style_properties(style_obj, style_def)
+        apply_docx_style_attributes(
+            style_obj=style_obj, 
+            style_def= style_def, 
+            style_attributes_names_mapping=style_attributes_names_mapping
+        )
 
 
-def apply_style_properties(style_obj, style_def: dict):
+def apply_docx_style_attributes(style_obj, style_def: dict, style_attributes_names_mapping: dict):
     """
-    Apply font and paragraph formatting from a style definition to a docx style object.
+    Apply font and paragraph formatting attributes from a style definition to a docx style object.
     """
-    font_def = style_def.get("font", {})
-    para_def = style_def.get("paragraph_format", {})
+    font_def = style_def.get(style_attributes_names_mapping["font"], {})
+    para_def = style_def.get(style_attributes_names_mapping["paragraph_format"], {})
 
     if font_def:
-        apply_properties(style_obj.font, font_def, FONT_MAPPING)
+        map_config_to_docx_attributes(
+            target=style_obj.font, 
+            config_data=font_def, 
+            mapping=FONT_MAPPING
+        )
 
     if para_def:
-        apply_properties(style_obj.paragraph_format, para_def, PARAGRAPH_FORMAT_MAPPING)
+        map_config_to_docx_attributes(
+            target=style_obj.paragraph_format, 
+            config_data=para_def, 
+            mapping=PARAGRAPH_FORMAT_MAPPING
+        )
 
 
-def apply_properties(target, data: dict, mapping: dict):
+def map_config_to_docx_attributes(target, config_data: dict, mapping: dict):
     """
-    Apply values from data to target attributes using mapping rules.
-    mapping: {"json_key": ("attr_name", converter_function)}
+    Map configuration dictionary keys to docx object attributes using mapping rules.
+
+    mapping: {"config_key": ("attribute_name", converter_function)}
     """
     for key, (attr, converter) in mapping.items():
-        if key not in data or data[key] is None:
+        if key not in config_data or config_data[key] is None:
             continue
 
         if converter:
             try:
-                value = converter(target, data[key])
+                value = converter(target, config_data[key])
             except TypeError:
-                value = converter(data[key])
+                value = converter(config_data[key])
         else:
-            value = data[key]
+            value = config_data[key]
 
         if "." in attr:
             obj, subattr = attr.split(".", 1)
