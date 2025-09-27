@@ -126,7 +126,13 @@ properties:
         properties:
           paragraph_format: { $ref: "#/$defs/StyleDefinition/properties/paragraph_format" }
           list_item_termination: { type: object }
-          style: { type: string }
-
+          bullet_char: { type: string }
+          indent:
+            type: object
+            properties:
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+        additionalProperties: false
 required:
   - document_formatter_config

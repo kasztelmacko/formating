@@ -22,6 +22,9 @@ document_formatter_config:
         first_line_indent: 1.0
         space_before: 0
         space_after: 0
+        keep_with_next: false
+        keep_together: false
+        widow_control: true
       font:
         name: Times New Roman
         size: 12
@@ -33,13 +36,13 @@ document_formatter_config:
       based_on: main_text
       apply_to_regex: "^ROZDZIAŁ [IVXLCDM]+\\."
       paragraph_format:
-        alignment: LEFT
+        alignment: CENTER
         page_break_before: true
         space_after: 12
+        keep_with_next: true
       font:
         all_caps: true
         bold: true
-        size: 12
 
     subchapter_titles_level_2:
       based_on: main_text
@@ -48,10 +51,10 @@ document_formatter_config:
         alignment: LEFT
         space_before: 18
         space_after: 18
-        hanging_indent: 1.0
+        keep_with_next: true
+        first_line_indent: 0
       font:
         bold: true
-        size: 12
 
     subchapter_titles_level_3:
       based_on: main_text
@@ -60,9 +63,10 @@ document_formatter_config:
         alignment: LEFT
         space_before: 18
         space_after: 18
+        keep_with_next: true
+        first_line_indent: 0
       font:
-        bold: false
-        size: 12
+        bold: true
 
   ## Table Rules
   table_rules:
@@ -136,9 +140,12 @@ document_formatter_config:
 
   ## Enumerated List Rules
   list_rules:
-    style: dash
+    bullet_char: dash
     paragraph_format:
       alignment: LEFT
     list_item_termination:
       intermediate: none
       last_item: period
+    indent:
+      left: 360
+      hanging: 360

@@ -38,14 +38,26 @@ def _remove_empty_paragraph(paragraph):
         p_element = paragraph._element
         p_element.getparent().remove(p_element)
 
-def _adjust_bullet_character(doc, bullet_char):
+def _adjust_bullet_character(doc, list_rules: dict):
+    """
+    Adjust bullet characters in the document based on list_rules config.
+    """
+    bullet_char = list_rules.get("bullet_char")
+    if not bullet_char or bullet_char not in BULLET_CHARACTER_OPTIONS:
+        return
+    
+    indent_cfg = list_rules.get("indent", {})
+    left = indent_cfg.get("left", 720)
+    hanging = indent_cfg.get("hanging", 360)
+
     numbering_xml = doc.part.numbering_part._element
     abstract_nums = numbering_xml.findall(f'.//{{{OPENXML_FORMATS["W"]}}}abstractNum')
 
     for _, abstract_num in enumerate(abstract_nums):
-
         levels = abstract_num.findall(f'.//{{{OPENXML_FORMATS["W"]}}}lvl')
         for level in levels:
+            _set_list_indent(level, left, hanging)
+
             lvl_text = level.find(f'{{{OPENXML_FORMATS["W"]}}}lvlText')
             if lvl_text is None:
                 lvl_text = Element(f'{{{OPENXML_FORMATS["W"]}}}lvlText')
@@ -58,3 +70,22 @@ def _adjust_bullet_character(doc, bullet_char):
                 rFonts = rPr.find(f'{{{OPENXML_FORMATS["W"]}}}rFonts')
                 if rFonts is not None:
                     rPr.remove(rFonts)
+
+
+def _set_list_indent(level, left, hanging):
+    """
+    Set indentation on a numbering level (<w:lvl>).
+    """
+
+    pPr = level.find(f'{{{OPENXML_FORMATS["W"]}}}pPr')
+    if pPr is None:
+        pPr = Element(f'{{{OPENXML_FORMATS["W"]}}}pPr')
+        level.append(pPr)
+
+    ind = pPr.find(f'{{{OPENXML_FORMATS["W"]}}}ind')
+    if ind is None:
+        ind = Element(f'{{{OPENXML_FORMATS["W"]}}}ind')
+        pPr.append(ind)
+
+    ind.set(f'{{{OPENXML_FORMATS["W"]}}}left', str(left))
+    ind.set(f'{{{OPENXML_FORMATS["W"]}}}hanging', str(hanging))
