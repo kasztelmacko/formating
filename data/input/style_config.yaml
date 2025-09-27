@@ -34,7 +34,8 @@ document_formatter_config:
 
     chapter_titles:
       based_on: main_text
-      apply_to_regex: "^ROZDZIAŁ [IVXLCDM]+\\."
+      numbering_format: ROMAN
+      numbering_side: RIGHT
       paragraph_format:
         alignment: CENTER
         page_break_before: true
@@ -46,7 +47,8 @@ document_formatter_config:
 
     subchapter_titles_level_2:
       based_on: main_text
-      apply_to_regex: "^[0-9]+\\.[0-9]+\\."
+      numbering_format: ARABIC
+      numbering_side: LEFT
       paragraph_format:
         alignment: LEFT
         space_before: 18
@@ -58,7 +60,8 @@ document_formatter_config:
 
     subchapter_titles_level_3:
       based_on: main_text
-      apply_to_regex: "^[0-9]+\\.[0-9]+\\.[0-9]+\\."
+      numbering_format: ARABIC
+      numbering_side: LEFT
       paragraph_format:
         alignment: LEFT
         space_before: 18

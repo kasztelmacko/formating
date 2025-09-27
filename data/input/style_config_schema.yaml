@@ -8,7 +8,10 @@ $defs:
     properties:
       based_on:
         type: [string, "null"]
-        description: "Optional base style name to inherit from"
+      numbering_format:
+        type: [string, "null"]
+      numbering_side: 
+        type: [string, "null"]
       paragraph_format:
         type: object
         properties:

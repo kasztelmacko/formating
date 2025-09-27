@@ -1,11 +1,11 @@
-from style_mapping import STYLE_ATTRIBUTES_NAMES_MAPPING, STYLE_NAMES_MAPPING
+from style_mapping import STYLE_ATTRIBUTES_NAMES_MAPPING, STYLE_NAMES_MAPPING, CHAPTER_SECTION_NUMBERING_REGEX
 from docx import Document
 
 from document_formatter_config import DocumentFormatterConfig
 from styling_utils.style_appliers import apply_docx_style_definitions
 from styling_utils.paragraph_cleaning_utils import clean_paragraph, remove_empty_paragraph
 from styling_utils.bullet_list_styling_util import update_bullet_characters
-from styling_utils.chapter_section_styles_utils import enforce_chapter_page_breaks
+from styling_utils.chapter_section_styles_utils import enforce_chapter_page_breaks, apply_chapter_section_numbering
 
 class DocumentFormattingAgent:
     def __init__(self, doc: Document, config: DocumentFormatterConfig):
@@ -32,6 +32,12 @@ class DocumentFormattingAgent:
             doc=self.doc, 
             style_definitions=self.config.chapter_and_section_rules, 
             style_attributes_names_mapping=STYLE_ATTRIBUTES_NAMES_MAPPING
+        )
+        apply_chapter_section_numbering(
+            doc=self.doc,
+            style_definitions=self.config.chapter_and_section_rules,
+            style_attributes_names_mapping=STYLE_ATTRIBUTES_NAMES_MAPPING,
+            chapter_section_numbering_regex=CHAPTER_SECTION_NUMBERING_REGEX
         )
 
     def apply_list_styles(self):
