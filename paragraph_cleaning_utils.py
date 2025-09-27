@@ -1,10 +1,38 @@
+from style_mapping import OPENXML_FORMATS
+
 def clean_paragraph(paragraph, trim_spaces=True):
-    """Remove unnecessary blank lines/spaces from a paragraph."""
-    if trim_spaces:
+    """
+    Trim leading/trailing whitespace/newlines from paragraph text,
+    without touching inline objects like images or equations.
+    """
+    if trim_spaces and paragraph.text:
         paragraph.text = paragraph.text.lstrip("\n\r ").rstrip("\n\r ")
 
 def remove_empty_paragraph(paragraph):
-    """Remove empty paragraph from the document."""
-    if not paragraph.text.strip():
+    """
+    Remove a paragraph only if it is truly empty (no text, no runs, no images/equations).
+    """
+    if is_paragraph_empty(paragraph):
         p_element = paragraph._element
         p_element.getparent().remove(p_element)
+
+def is_paragraph_empty(paragraph) -> bool:
+    """
+    Determine if a paragraph is truly empty (no text, no runs, no inline shapes or math).
+    """
+    if paragraph.text.strip():
+        return False
+
+    for run in paragraph.runs:
+        if run.text.strip():
+            return False
+        if run._element.findall(f".//{{{OPENXML_FORMATS['W']}}}drawing"):
+            return False
+        if run._element.findall(f".//{{{OPENXML_FORMATS['M']}}}oMath"):
+            return False
+        if run._element.findall(f".//{{{OPENXML_FORMATS['PIC']}}}pic"):
+            return False
+        if run._element.findall(f".//{{{OPENXML_FORMATS['V']}}}shape"):
+            return False
+
+    return True

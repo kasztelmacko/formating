@@ -65,5 +65,12 @@ BULLET_CHARACTER_OPTIONS = {
 }
 
 OPENXML_FORMATS = {
-    "W": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    "W": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",  # WordprocessingML
+    "MC": "http://schemas.openxmlformats.org/markup-compatibility/2006",  # Markup compatibility
+    "WP": "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing",  # Wordprocessing drawings
+    "A": "http://schemas.openxmlformats.org/drawingml/2006/main",  # DrawingML main
+    "PIC": "http://schemas.openxmlformats.org/drawingml/2006/picture",  # Pictures
+    "M": "http://schemas.openxmlformats.org/officeDocument/2006/math",  # Office Math (equations)
+    "R": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",  # Relationships
+    "V": "urn:schemas-microsoft-com:vml",  # Legacy VML shapes
 }
