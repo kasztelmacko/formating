@@ -1,3 +1,4 @@
+from re import match
 from style_mapping import _arabic_to_roman, _roman_to_arabic
 
 def enforce_chapter_page_breaks(doc, style_names_mapping):
@@ -68,7 +69,7 @@ def _process_paragraph_text(text, numbering_format, numbering_side, regex_patter
         number_group, separator_group = (1, 2) if numbering_side == "LEFT" else (2, 1)
 
         source_num = match.group(number_group)
-        separator = match.group(separator_group) if separator_group <= match.lastindex else ""
+        separator = (match.group(separator_group) if separator_group <= match.lastindex else "") or " "
         
         convert_number = _arabic_to_roman if numbering_format == "ROMAN" else _roman_to_arabic
         new_numbering = convert_number(source_num)
@@ -76,17 +77,11 @@ def _process_paragraph_text(text, numbering_format, numbering_side, regex_patter
         if numbering_side == "LEFT":
             text_before = text[:match.start(number_group)]
             text_after = text[match.end(separator_group) if separator_group <= match.lastindex else match.end(number_group):]
-            if separator:
-                return f"{text_before}{new_numbering}{separator}{text_after}"
-            else:
-                return f"{text_before}{new_numbering} {text_after}"
+            return f"{text_before}{new_numbering}{separator}{text_after}"
         else:
             text_before = text[:match.start(separator_group) if separator_group <= match.lastindex else match.start(number_group)]
             text_after = text[match.end(number_group):]
-            if separator:
-                return f"{text_before}{separator}{new_numbering}{text_after}"
-            else:
-                return f"{text_before} {new_numbering}{text_after}"
+            return f"{text_before}{separator}{new_numbering}{text_after}"
 
     except Exception:
         return text
