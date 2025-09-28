@@ -33,9 +33,9 @@ def apply_docx_style_attributes(style_obj, style_def: dict, style_attributes_nam
     """
     Apply font and paragraph formatting attributes from a style definition to a docx style object.
     """
-    font_def = style_def.get(style_attributes_names_mapping["font"], {})
-    para_def = style_def.get(style_attributes_names_mapping["paragraph_format"], {})
-
+    font_def = style_def.get(style_attributes_names_mapping["font_format"], {})
+    paragraph_def = style_def.get(style_attributes_names_mapping["paragraph_format"], {})
+    
     if font_def:
         map_config_to_docx_attributes(
             target=style_obj.font, 
@@ -43,12 +43,13 @@ def apply_docx_style_attributes(style_obj, style_def: dict, style_attributes_nam
             mapping=FONT_MAPPING
         )
 
-    if para_def:
+    if paragraph_def:
         map_config_to_docx_attributes(
             target=style_obj.paragraph_format, 
-            config_data=para_def, 
+            config_data=paragraph_def, 
             mapping=PARAGRAPH_FORMAT_MAPPING
         )
+
 
 
 def map_config_to_docx_attributes(target, config_data: dict, mapping: dict):

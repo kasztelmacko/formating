@@ -25,7 +25,7 @@ document_formatter_config:
         space_after: 0
         keep_together: false
         widow_control: true
-      font:
+      font_format:
         name: Times New Roman
         size: 12
 
@@ -34,41 +34,47 @@ document_formatter_config:
 
     chapter_titles:
       based_on: main_text
-      numbering_format: ROMAN
-      numbering_side: RIGHT
+      numbering_format:
+        type: ROMAN
+        side: RIGHT
+        separator: " "
       paragraph_format:
         alignment: CENTER
         page_break_before: true
         space_after: 12
         keep_with_next: true
-      font:
+      font_format:
         all_caps: true
         bold: true
 
     subchapter_titles_level_2:
       based_on: main_text
-      numbering_format: ARABIC
-      numbering_side: LEFT
+      numbering_format:
+        type: ARABIC
+        side: LEFT
+        separator: " "
       paragraph_format:
         alignment: LEFT
         space_before: 18
         space_after: 18
         keep_with_next: true
         first_line_indent: 0
-      font:
+      font_format:
         bold: true
 
     subchapter_titles_level_3:
       based_on: main_text
-      numbering_format: ARABIC
-      numbering_side: LEFT
+      numbering_format:
+        type: ARABIC
+        side: LEFT
+        separator: " "
       paragraph_format:
         alignment: LEFT
         space_before: 18
         space_after: 18
         keep_with_next: true
         first_line_indent: 0
-      font:
+      font_format:
         bold: true
 
   ## Table Rules
@@ -80,14 +86,14 @@ document_formatter_config:
       paragraph_format:
         alignment: LEFT
         space_after: 12
-      font:
+      font_format:
         size: 12
         bold: false
 
     header_row_style:
       paragraph_format:
         alignment: center
-      font:
+      font_format:
         bold: true
 
     source_style:
@@ -95,7 +101,7 @@ document_formatter_config:
       position: below
       paragraph_format:
         space_before: 12
-      font:
+      font_format:
         size: 10
         italic: true
 
@@ -106,7 +112,7 @@ document_formatter_config:
       numbering: Sequential_Global
       paragraph_format:
         alignment: LEFT
-      font:
+      font_format:
         size: 12
 
     source_style:
@@ -114,7 +120,7 @@ document_formatter_config:
       position: below
       paragraph_format:
         space_before: 12
-      font:
+      font_format:
         size: 10
         italic: true
 
@@ -126,7 +132,7 @@ document_formatter_config:
       alignment: CENTER
       space_before: 12
       space_after: 12
-    font:
+    font_format:
       name: Times New Roman
       size: 12
       bold: false

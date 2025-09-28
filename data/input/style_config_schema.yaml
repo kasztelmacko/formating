@@ -9,9 +9,12 @@ $defs:
       based_on:
         type: [string, "null"]
       numbering_format:
-        type: [string, "null"]
-      numbering_side: 
-        type: [string, "null"]
+        type: object
+        properties:
+          type: { type: [string, "null"] }
+          side: { type: [string, "null"] }
+          separator: { type: [string, "null"] }
+        additionalProperties: false
       paragraph_format:
         type: object
         properties:
@@ -38,7 +41,7 @@ $defs:
                 alignment: { type: string }
                 leader: { type: [string, "null"] }
         additionalProperties: false
-      font:
+      font_format:
         type: object
         properties:
           name: { type: [string, "null"] }
@@ -123,7 +126,7 @@ properties:
         type: object
         properties:
           paragraph_format: { $ref: "#/$defs/StyleDefinition/properties/paragraph_format" }
-          font: { $ref: "#/$defs/StyleDefinition/properties/font" }
+          font_format: { $ref: "#/$defs/StyleDefinition/properties/font_format" }
           description_list: { type: object }
 
       list_rules:

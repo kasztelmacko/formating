@@ -32,7 +32,7 @@ STYLE_NAMES_MAPPING = {
 }
 
 STYLE_ATTRIBUTES_NAMES_MAPPING = {
-    'font': 'font',
+    'font_format': 'font_format',
     'paragraph_format': 'paragraph_format',
     'based_on': 'based_on',
     'numbering_format': 'numbering_format',
