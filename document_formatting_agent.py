@@ -4,7 +4,7 @@ from docx import Document
 from document_formatter_config import DocumentFormatterConfig
 from styling_utils.style_appliers import apply_docx_style_definitions
 from styling_utils.paragraph_cleaning_utils import clean_paragraph, remove_empty_paragraph
-from styling_utils.bullet_list_styling_util import update_bullet_characters
+from styling_utils.bullet_list_styling_util import update_bullet_characters, apply_list_termination_characters
 from styling_utils.chapter_section_styles_utils import enforce_chapter_page_breaks, adjust_chapter_section_numbering_format
 
 class DocumentFormattingAgent:
@@ -44,6 +44,7 @@ class DocumentFormattingAgent:
         """Apply bullet list rules from the configuration."""
         update_bullet_characters(doc=self.doc, list_config=self.config.list_rules)
         enforce_chapter_page_breaks(doc=self.doc, style_names_mapping=STYLE_NAMES_MAPPING)
+        apply_list_termination_characters(doc=self.doc, list_config=self.config.list_rules)
 
     def clean_paragraphs(self):
         """

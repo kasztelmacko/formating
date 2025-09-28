@@ -153,8 +153,8 @@ document_formatter_config:
     paragraph_format:
       alignment: LEFT
     list_item_termination:
-      intermediate: none
-      last_item: period
+      intermediate: ""
+      last_item: "."
     indent:
       left: 360
       hanging: 360
