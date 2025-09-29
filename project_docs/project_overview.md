@@ -42,16 +42,16 @@ It eliminates the tedious process of manually formatting unformatted or semi-for
 ---
 
 ## Features
-- **Document formatting**: global layout and structure.  
-- **Paragraph formatting**: spacing, indentation, alignment.  
-- **Text formatting**: font styles, size, color.  
-- **Adjustments**: specific text transformations or replacements.  
-
+- **Document formatting**: global layout and structure.
+- **Paragraph formatting**: spacing, indentation, alignment.
+- **Text formatting**: font styles, size, color.
+- **Adjustments**: specific text transformations or replacements.
+- **Section and Style identyfication**: when user provides docx file identify to which paragraphs which style should be applied
 ---
 
 ## Goal
-Users provide:  
-1. An **input `.docx` file**.  
-2. A **YAML configuration** containing formatting rules.  
+Users provide:
+1. An **input `.docx` file**.
+2. A **YAML configuration** containing formatting rules.
 
-The system outputs a **fully formatted Word document** that conforms to the specified style guide.  
+The system outputs a **fully formatted Word document** that conforms to the specified style guide.
