@@ -1,4 +1,4 @@
-from style_mapping import OPENXML_FORMATS
+from style_mapping_config import OPENXML_FORMATS
 
 def clean_paragraph(paragraph, trim_spaces=True):
     """

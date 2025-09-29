@@ -1,4 +1,4 @@
-from style_mapping import FONT_MAPPING, PARAGRAPH_FORMAT_MAPPING
+from style_mapping_config import FONT_MAPPING, PARAGRAPH_FORMAT_MAPPING
 
 def apply_docx_style_definitions(doc, style_definitions: dict, style_attributes_names_mapping: dict):
     """

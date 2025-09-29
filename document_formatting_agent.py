@@ -1,4 +1,4 @@
-from style_mapping import STYLE_ATTRIBUTES_NAMES_MAPPING, STYLE_NAMES_MAPPING, CHAPTER_SECTION_NUMBERING_REGEX
+from style_mapping_config import STYLE_ATTRIBUTES_NAMES_MAPPING, STYLE_NAMES_MAPPING, CHAPTER_SECTION_NUMBERING_REGEX
 from docx import Document
 
 from document_formatter_config import DocumentFormatterConfig

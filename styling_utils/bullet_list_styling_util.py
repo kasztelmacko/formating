@@ -1,5 +1,5 @@
 from xml.etree.ElementTree import Element
-from style_mapping import OPENXML_FORMATS, BULLET_CHARACTER_OPTIONS
+from style_mapping_config import OPENXML_FORMATS, BULLET_CHARACTER_OPTIONS
 from docx.oxml.ns import qn
 
 def w_tag(tag: str) -> str:

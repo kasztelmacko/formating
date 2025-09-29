@@ -1,4 +1,4 @@
-from style_mapping import _arabic_to_roman, _roman_to_arabic, CHAPTER_SECTION_NUMBERING_REGEX
+from style_mapping_config import _arabic_to_roman, _roman_to_arabic, CHAPTER_SECTION_NUMBERING_REGEX
 
 def enforce_chapter_page_breaks(doc, style_names_mapping):
     """
