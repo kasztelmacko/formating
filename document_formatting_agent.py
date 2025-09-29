@@ -5,7 +5,7 @@ from document_formatter_config import DocumentFormatterConfig
 from styling_utils.style_appliers import apply_docx_style_definitions
 from styling_utils.paragraph_cleaning_utils import clean_paragraph, remove_empty_paragraph
 from styling_utils.bullet_list_styling_util import update_bullet_characters, apply_list_termination_characters
-from styling_utils.chapter_section_styles_utils import enforce_chapter_page_breaks, adjust_chapter_section_numbering_format
+from styling_utils.chapter_section_styles_utils import enforce_chapter_page_breaks, adjust_chapter_section_numbering_format, adjust_section_numbering_order
 
 class DocumentFormattingAgent:
     def __init__(self, doc: Document, config: DocumentFormatterConfig):
@@ -33,12 +33,23 @@ class DocumentFormattingAgent:
             style_definitions=self.config.chapter_and_section_rules, 
             style_attributes_names_mapping=STYLE_ATTRIBUTES_NAMES_MAPPING
         )
-        adjust_chapter_section_numbering_format(
-            doc=self.doc,
-            style_definitions=self.config.chapter_and_section_rules,
-            style_attributes_names_mapping=STYLE_ATTRIBUTES_NAMES_MAPPING,
-            chapter_section_numbering_regex=CHAPTER_SECTION_NUMBERING_REGEX
-        )
+        
+        refactor_section_numbering = self.config.document_setup.get("refactor_section_numbering", False)
+        
+        if refactor_section_numbering:
+            adjust_section_numbering_order(
+                doc=self.doc,
+                style_definitions=self.config.chapter_and_section_rules,
+                style_names_mapping=STYLE_NAMES_MAPPING,
+                style_attributes_names_mapping=STYLE_ATTRIBUTES_NAMES_MAPPING
+            )
+        else:
+            adjust_chapter_section_numbering_format(
+                doc=self.doc,
+                style_definitions=self.config.chapter_and_section_rules,
+                style_attributes_names_mapping=STYLE_ATTRIBUTES_NAMES_MAPPING,
+                chapter_section_numbering_regex=CHAPTER_SECTION_NUMBERING_REGEX
+            )
 
     def apply_list_styles(self):
         """Apply bullet list rules from the configuration."""

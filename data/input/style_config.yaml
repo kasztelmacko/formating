@@ -13,6 +13,7 @@ document_formatter_config:
       name: Times New Roman
       size: 12
     trim_spaces: true
+    refactor_section_numbering: true
 
   ## Paragraph-Level Configuration
   paragraph_styles:

@@ -95,8 +95,8 @@ properties:
               name: { type: string }
               size: { type: number }
             required: [name, size]
-            trim_spaces:
-              type: boolean
+          trim_spaces: { type: boolean }
+          refactor_section_numbering: { type: boolean }
         required: [page_size, margins, orientation, default_font]
 
       paragraph_styles:
