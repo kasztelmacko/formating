@@ -142,5 +142,38 @@ properties:
               hanging: { type: integer }
             additionalProperties: false
         additionalProperties: false
+
+      header_footer_rules:
+        type: object
+        properties:
+          header_style: { $ref: "#/$defs/StyleDefinition" }
+          footer_style: { $ref: "#/$defs/StyleDefinition" }
+          header_content:
+            type: object
+            properties:
+              left: 
+                type: [string, "null"]
+                description: "Left-aligned header content. Supports dynamic fields: {page}, {numpages}, {date}, {time}, {datetime}"
+              center: 
+                type: [string, "null"]
+                description: "Center-aligned header content. Supports dynamic fields: {page}, {numpages}, {date}, {time}, {datetime}"
+              right: 
+                type: [string, "null"]
+                description: "Right-aligned header content. Supports dynamic fields: {page}, {numpages}, {date}, {time}, {datetime}"
+            additionalProperties: false
+          footer_content:
+            type: object
+            properties:
+              left: 
+                type: [string, "null"]
+                description: "Left-aligned footer content. Supports dynamic fields: {page}, {numpages}, {date}, {time}, {datetime}"
+              center: 
+                type: [string, "null"]
+                description: "Center-aligned footer content. Supports dynamic fields: {page}, {numpages}, {date}, {time}, {datetime}"
+              right: 
+                type: [string, "null"]
+                description: "Right-aligned footer content. Supports dynamic fields: {page}, {numpages}, {date}, {time}, {datetime}"
+            additionalProperties: false
+        additionalProperties: false
 required:
   - document_formatter_config

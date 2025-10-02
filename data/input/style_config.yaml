@@ -159,3 +159,29 @@ document_formatter_config:
     indent:
       left: 360
       hanging: 360
+
+  ## Header and Footer Rules
+  header_footer_rules:
+    header_style:
+      font_format:
+        name: Times New Roman
+        size: 10
+        bold: false
+        italic: false
+    
+    footer_style:
+      font_format:
+        name: Times New Roman
+        size: 10
+        bold: false
+        italic: false
+    
+    header_content:
+      left: ""
+      center: ""
+      right: ""
+    
+    footer_content:
+      left: ""
+      center: "{page} of {numpages}"
+      right: ""

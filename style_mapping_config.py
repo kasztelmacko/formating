@@ -29,6 +29,8 @@ STYLE_NAMES_MAPPING = {
     'caption_style': 'caption_style',
     'header_row_style': 'header_row_style',
     'source_style': 'source_style',
+    'header_style': 'header_style',
+    'footer_style': 'footer_style',
 }
 
 STYLE_ATTRIBUTES_NAMES_MAPPING = {
@@ -95,4 +97,39 @@ OPENXML_FORMATS = {
     "M": "http://schemas.openxmlformats.org/officeDocument/2006/math",  # Office Math (equations)
     "R": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",  # Relationships
     "V": "urn:schemas-microsoft-com:vml",  # Legacy VML shapes
+}
+
+# Pre-computed XML namespace tags for WordprocessingML elements
+W_TAGS = {
+    'abstractNum': f'{{{OPENXML_FORMATS["W"]}}}abstractNum',
+    'lvl': f'{{{OPENXML_FORMATS["W"]}}}lvl',
+    'pPr': f'{{{OPENXML_FORMATS["W"]}}}pPr',
+    'ind': f'{{{OPENXML_FORMATS["W"]}}}ind',
+    'left': f'{{{OPENXML_FORMATS["W"]}}}left',
+    'hanging': f'{{{OPENXML_FORMATS["W"]}}}hanging',
+    'lvlText': f'{{{OPENXML_FORMATS["W"]}}}lvlText',
+    'val': f'{{{OPENXML_FORMATS["W"]}}}val',
+    'rPr': f'{{{OPENXML_FORMATS["W"]}}}rPr',
+    'rFonts': f'{{{OPENXML_FORMATS["W"]}}}rFonts',
+    'numPr': f'{{{OPENXML_FORMATS["W"]}}}numPr',
+    'numId': f'{{{OPENXML_FORMATS["W"]}}}numId',
+    'ilvl': f'{{{OPENXML_FORMATS["W"]}}}ilvl'
+}
+
+HEADER_FOOTER_FIELD_MAPPINGS = [
+    (r'\{page_number\}', 'PAGE'),
+    (r'\{total_pages\}', 'NUMPAGES'),
+    (r'\{datetime\}', 'DATE \\@ "dd/MM/yyyy HH:mm"'),
+    (r'\{numpages\}', 'NUMPAGES'),
+    (r'\{page\}', 'PAGE'),
+    (r'\{date\}', 'DATE \\@ "dd/MM/yyyy"'),
+    (r'\{time\}', 'TIME \\@ "HH:mm"')
+]
+
+HEADER_FOOTER_LAYOUT_CONFIG = {
+    'use_table_for_multiple_positions': True,
+    'table_style': 'Table Grid',
+    'table_borders': False,
+    'column_widths': [33.33, 33.33, 33.34],
+    'alignments': ['left', 'center', 'right']
 }

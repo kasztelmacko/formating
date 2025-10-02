@@ -1,6 +1,4 @@
-from style_mapping_config import FONT_MAPPING, PARAGRAPH_FORMAT_MAPPING
-
-def apply_docx_style_definitions(doc, style_definitions: dict, style_attributes_names_mapping: dict):
+def apply_docx_style_definitions(doc, style_definitions: dict, style_attributes_names_mapping: dict, font_mapping: dict, paragraph_format_mapping: dict):
     """
     Apply a set of style definitions from a configuration dictionary to a docx Document.
 
@@ -25,11 +23,13 @@ def apply_docx_style_definitions(doc, style_definitions: dict, style_attributes_
         apply_docx_style_attributes(
             style_obj=style_obj, 
             style_def= style_def, 
-            style_attributes_names_mapping=style_attributes_names_mapping
+            style_attributes_names_mapping=style_attributes_names_mapping,
+            font_mapping=font_mapping,
+            paragraph_format_mapping=paragraph_format_mapping,
         )
 
 
-def apply_docx_style_attributes(style_obj, style_def: dict, style_attributes_names_mapping: dict):
+def apply_docx_style_attributes(style_obj, style_def: dict, style_attributes_names_mapping: dict, font_mapping: dict, paragraph_format_mapping: dict):
     """
     Apply font and paragraph formatting attributes from a style definition to a docx style object.
     """
@@ -40,14 +40,14 @@ def apply_docx_style_attributes(style_obj, style_def: dict, style_attributes_nam
         map_config_to_docx_attributes(
             target=style_obj.font, 
             config_data=font_def, 
-            mapping=FONT_MAPPING
+            mapping=font_mapping
         )
 
     if paragraph_def:
         map_config_to_docx_attributes(
             target=style_obj.paragraph_format, 
             config_data=paragraph_def, 
-            mapping=PARAGRAPH_FORMAT_MAPPING
+            mapping=paragraph_format_mapping
         )
 
 

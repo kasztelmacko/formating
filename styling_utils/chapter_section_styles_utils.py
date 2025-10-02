@@ -1,4 +1,4 @@
-from style_mapping_config import _arabic_to_roman, _roman_to_arabic, CHAPTER_SECTION_NUMBERING_REGEX
+from style_mapping_config import _arabic_to_roman, _roman_to_arabic
 
 def enforce_chapter_page_breaks(doc, style_names_mapping):
     """
@@ -78,7 +78,7 @@ def _process_paragraph_text(text, numbering_format, numbering_side, regex_patter
         return text
 
 
-def _apply_numbering_to_text(text, new_numbering, numbering_format, numbering_side, separator=" "):
+def _apply_numbering_to_text(text, new_numbering, numbering_format, numbering_side, separator=" ", chapter_section_numbering_regex=None):
     """
     Apply new numbering to text using the same logic as _process_paragraph_text.
     This function handles both LEFT and RIGHT side numbering and uses the proper regex patterns.
@@ -89,12 +89,16 @@ def _apply_numbering_to_text(text, new_numbering, numbering_format, numbering_si
         numbering_format: "ROMAN" or "ARABIC"
         numbering_side: "LEFT" or "RIGHT"
         separator: Separator to use
+        chapter_section_numbering_regex: Regex patterns for chapter section numbering
     
     Returns:
         Updated text with new numbering applied
     """
+    if not chapter_section_numbering_regex:
+        return f"{new_numbering}{separator}{text}"
+        
     pattern_key = f"{numbering_format.lower()}_{numbering_side.lower()}"
-    pattern = CHAPTER_SECTION_NUMBERING_REGEX.get(pattern_key)
+    pattern = chapter_section_numbering_regex.get(pattern_key)
     
     if not pattern:
         return f"{new_numbering}{separator}{text}"
@@ -124,7 +128,7 @@ def _apply_numbering_to_text(text, new_numbering, numbering_format, numbering_si
         return f"{new_numbering}{separator}{text}"
 
 
-def adjust_section_numbering_order(doc, style_names_mapping, style_definitions=None, style_attributes_names_mapping=None):
+def adjust_section_numbering_order(doc, style_names_mapping, style_definitions=None, style_attributes_names_mapping=None, chapter_section_numbering_regex=None):
     """
     Adjust section numbering based on hierarchy:
     1. Find first paragraph with style chapter_titles and assign current_chapter = 1
@@ -155,7 +159,8 @@ def adjust_section_numbering_order(doc, style_names_mapping, style_definitions=N
                 
                 paragraph.text = _update_paragraph_numbering(
                     paragraph.text, current_chapter, None, None, 
-                    style_definitions, style_attributes_names_mapping, style_name
+                    style_definitions, style_attributes_names_mapping, style_name,
+                    chapter_section_numbering_regex
                 )
             
         elif style_name == style_names_mapping["subchapter_titles_level_2"]:
@@ -165,7 +170,8 @@ def adjust_section_numbering_order(doc, style_names_mapping, style_definitions=N
 
                 paragraph.text = _update_paragraph_numbering(
                     paragraph.text, current_chapter, current_subchapter_level_2, None,
-                    style_definitions, style_attributes_names_mapping, style_name
+                    style_definitions, style_attributes_names_mapping, style_name,
+                    chapter_section_numbering_regex
                 )
             
         elif style_name == style_names_mapping["subchapter_titles_level_3"]:
@@ -174,14 +180,16 @@ def adjust_section_numbering_order(doc, style_names_mapping, style_definitions=N
 
                 paragraph.text = _update_paragraph_numbering(
                     paragraph.text, current_chapter, current_subchapter_level_2, current_subchapter_level_3,
-                    style_definitions, style_attributes_names_mapping, style_name
+                    style_definitions, style_attributes_names_mapping, style_name,
+                    chapter_section_numbering_regex
                 )
         else:
             chapter_numbering_applied = False
 
 
 def _update_paragraph_numbering(text, chapter_num, subchapter_level_2_num, subchapter_level_3_num, 
-                               style_definitions=None, style_attributes_names_mapping=None, style_name=None):
+                               style_definitions=None, style_attributes_names_mapping=None, style_name=None,
+                                chapter_section_numbering_regex=None):
     """
     Update paragraph text with new numbering based on the hierarchy level.
     
@@ -193,12 +201,18 @@ def _update_paragraph_numbering(text, chapter_num, subchapter_level_2_num, subch
         style_definitions: Dictionary containing style definitions
         style_attributes_names_mapping: Mapping for style attribute names
         style_name: Name of the current style
+        arabic_to_roman_func: Function to convert Arabic to Roman numerals
+        chapter_section_numbering_regex: Regex patterns for chapter section numbering
     
     Returns:
         Updated text with new numbering
     """
     if not text.strip():
         return text
+
+    numbering_type = "ARABIC"
+    numbering_side = "LEFT"
+    separator = " "
 
     if style_definitions and style_attributes_names_mapping and style_name:
         style_def = style_definitions.get(style_name)
@@ -220,5 +234,5 @@ def _update_paragraph_numbering(text, chapter_num, subchapter_level_2_num, subch
     else:
         new_numbering = base_numbering
 
-    return _apply_numbering_to_text(text, new_numbering, numbering_type, numbering_side, separator)
+    return _apply_numbering_to_text(text, new_numbering, numbering_type, numbering_side, separator, chapter_section_numbering_regex)
 

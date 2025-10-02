@@ -17,6 +17,7 @@ class DocumentFormatterConfig:
         self.figure_rules = doc_config.get("figure_rules", {})
         self.formula_rules = doc_config.get("formula_rules", {})
         self.list_rules = doc_config.get("list_rules", {})
+        self.header_footer_rules = doc_config.get("header_footer_rules", {})
 
     @staticmethod
     def load_yaml_file(input_dir: str, filename: str) -> dict:
