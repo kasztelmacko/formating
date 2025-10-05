@@ -35,6 +35,10 @@ document_formatter_config:
 
     chapter_titles:
       based_on: main_text
+      common_pattern_format:
+        pattern: "CHAPTER"
+        side: LEFT
+        separator: " "
       numbering_format:
         type: ROMAN
         side: RIGHT
@@ -50,6 +54,7 @@ document_formatter_config:
 
     subchapter_titles_level_2:
       based_on: main_text
+      common_pattern: "number.number"
       numbering_format:
         type: ARABIC
         side: LEFT
@@ -65,6 +70,7 @@ document_formatter_config:
 
     subchapter_titles_level_3:
       based_on: main_text
+      common_pattern: "number.number.number"
       numbering_format:
         type: ARABIC
         side: LEFT
@@ -78,50 +84,60 @@ document_formatter_config:
       font_format:
         bold: true
 
-  ## Table Rules
-  table_rules:
-    caption_style:
-      apply_to_prefix: "Tabela"
-      position: above
-      numbering: Sequential_Global
+    table_titles:
+      based_on: main_text
+      common_pattern_format:
+        pattern: "Table"
+        side: LEFT
+        separator: " "
+      numbering_format:
+        type: ARABIC
+        side: LEFT
+        separator: " "
       paragraph_format:
         alignment: LEFT
-        space_after: 12
+        space_before: 12
+        space_after: 6
+        keep_with_next: true
+        first_line_indent: 0
       font_format:
-        size: 12
         bold: false
+        italic: false
 
-    header_row_style:
-      paragraph_format:
-        alignment: center
-      font_format:
-        bold: true
-
-    source_style:
-      apply_to_prefix: "Źródło:"
-      position: below
-      paragraph_format:
-        space_before: 12
-      font_format:
-        size: 10
-        italic: true
-
-  ## Figure Rules
-  figure_rules:
-    caption_style:
-      apply_to_prefix: "Rys."
-      numbering: Sequential_Global
+    figure_titles:
+      based_on: main_text
+      common_pattern_format:
+        pattern: "Figure"
+        side: LEFT
+        separator: " "
+      numbering_format:
+        type: ARABIC
+        side: LEFT
+        separator: " "
       paragraph_format:
         alignment: LEFT
-      font_format:
-        size: 12
-
-    source_style:
-      apply_to_prefix: "Źródło:"
-      position: below
-      paragraph_format:
         space_before: 12
+        space_after: 6
+        keep_with_next: true
+        first_line_indent: 0
       font_format:
+        bold: false
+        italic: false
+
+  ## Source Text Rules
+  source_rules:
+    source_text:
+      based_on: main_text
+      paragraph_format:
+        alignment: JUSTIFY
+        line_spacing: 1.0
+        first_line_indent: 0
+        space_before: 6
+        space_after: 6
+        keep_together: false
+        widow_control: true
+      font_format:
+        name: Times New Roman
         size: 10
         italic: true
 

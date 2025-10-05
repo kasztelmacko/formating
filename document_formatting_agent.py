@@ -7,6 +7,7 @@ from styling_utils.paragraph_cleaning_utils import clean_paragraph, remove_empty
 from styling_utils.bullet_list_styling_util import update_bullet_characters, apply_list_termination_characters
 from styling_utils.chapter_section_styles_utils import enforce_chapter_page_breaks, adjust_chapter_section_numbering_format, adjust_section_numbering_order
 from styling_utils.header_footer_styling_util import apply_header_footer_to_all_sections
+from styling_utils.table_figure_titles_utils import apply_table_figure_styles, apply_source_styles
 
 class DocumentFormattingAgent:
     def __init__(self, doc: Document, config: DocumentFormatterConfig):
@@ -17,6 +18,8 @@ class DocumentFormattingAgent:
         self.clean_paragraphs()
         self.apply_paragraph_styles()
         self.apply_chapter_section_styles()
+        self.apply_table_figure_styles()
+        self.apply_source_styles()
         self.apply_list_styles()
         self.apply_header_footer_styles()
 
@@ -57,6 +60,14 @@ class DocumentFormattingAgent:
                 style_attributes_names_mapping=MAPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
                 chapter_section_numbering_regex=MAPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
             )
+
+    def apply_table_figure_styles(self):
+        """Apply table and figure title styles from the configuration."""
+        apply_table_figure_styles(doc=self.doc, config=self.config)
+
+    def apply_source_styles(self):
+        """Apply source text styles from the configuration."""
+        apply_source_styles(doc=self.doc, config=self.config)
 
     def apply_list_styles(self):
         """Apply bullet list rules from the configuration."""
