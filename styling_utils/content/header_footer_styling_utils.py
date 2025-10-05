@@ -1,32 +1,27 @@
 import re
+from typing import Callable
 
+from docx.document import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
 from docx.oxml import OxmlElement
 from docx.oxml.shared import qn
+from docx.section import FooterPart, HeaderPart
 from docx.shared import Inches
+from docx.text.paragraph import Paragraph
+from docx.text.run import Run
 
 from styling_utils.core.style_appliers import map_config_to_docx_attributes
 
 
 def apply_header_footer_styles(
-    doc,
-    header_footer_config: dict,
-    style_attributes_names_mapping: dict,
-    field_mappings: dict,
-    font_mapping: dict,
-    layout_config: dict,
-):
-    """
-    Apply header and footer styles and content to the document.
-
-    Args:
-        doc: The docx Document object
-        header_footer_config: Configuration dictionary containing header/footer rules
-        style_attributes_names_mapping: Mapping for style attribute names
-        field_mappings: Field mapping configuration (defaults to HEADER_FOOTER_FIELD_MAPPINGS)
-        font_mapping: Font mapping configuration (defaults to FONT_MAPPING)
-        layout_config: Layout configuration (defaults to HEADER_FOOTER_LAYOUT_CONFIG)
-    """
+    doc: Document,
+    header_footer_config: dict[str, dict[str, str | dict[str, str]]],
+    style_attributes_names_mapping: dict[str, str],
+    field_mappings: list[tuple[str, str]],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+    layout_config: dict[str, bool],
+) -> None:
+    """Apply header and footer styles and content to the document."""
     section = doc.sections[0]
 
     header_style = header_footer_config.get("header_style", {})
@@ -61,26 +56,15 @@ def apply_header_footer_styles(
 
 
 def _apply_header_footer_formatting(
-    header_footer,
-    style_def: dict,
-    content_def: dict,
-    style_attributes_names_mapping: dict,
-    field_mappings,
-    font_mapping,
-    layout_config,
-):
-    """
-    Apply formatting and content to a header or footer using python-docx native methods.
-
-    Args:
-        header_footer: The header or footer object
-        style_def: Style definition dictionary
-        content_def: Content definition dictionary with left, center, right positions
-        style_attributes_names_mapping: Mapping for style attribute names
-        field_mappings: Field mapping configuration
-        font_mapping: Font mapping configuration
-        layout_config: Layout configuration
-    """
+    header_footer: HeaderPart | FooterPart,
+    style_def: dict[str, str | dict[str, str]],
+    content_def: dict[str, str],
+    style_attributes_names_mapping: dict[str, str],
+    field_mappings: list[tuple[str, str]],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+    layout_config: dict[str, bool],
+) -> None:
+    """Apply formatting and content to a header or footer using python-docx native methods."""
     for paragraph in header_footer.paragraphs[:]:
         paragraph._element.getparent().remove(paragraph._element)
 
@@ -116,13 +100,13 @@ def _apply_header_footer_formatting(
 
 
 def _create_simple_layout_native(
-    header_footer,
-    style_def: dict,
-    content_def: dict,
-    style_attributes_names_mapping: dict,
-    field_mappings,
-    font_mapping,
-):
+    header_footer: HeaderPart | FooterPart,
+    style_def: dict[str, str | dict[str, str]],
+    content_def: dict[str, str],
+    style_attributes_names_mapping: dict[str, str],
+    field_mappings: list[tuple[str, str]],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """Create a simple paragraph-based layout using python-docx native methods."""
     content_mapping = [
         (content_def.get("center", ""), WD_ALIGN_PARAGRAPH.CENTER),
@@ -150,13 +134,13 @@ def _create_simple_layout_native(
 
 
 def _create_table_layout_native(
-    header_footer,
-    style_def: dict,
-    content_def: dict,
-    style_attributes_names_mapping: dict,
-    field_mappings,
-    font_mapping,
-):
+    header_footer: HeaderPart | FooterPart,
+    style_def: dict[str, str | dict[str, str]],
+    content_def: dict[str, str],
+    style_attributes_names_mapping: dict[str, str],
+    field_mappings: list[tuple[str, str]],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """Create a tab-based layout for multiple content positions."""
     paragraph = _get_or_create_paragraph(header_footer)
     _setup_tab_stops(paragraph)
@@ -183,7 +167,9 @@ def _create_table_layout_native(
             paragraph.add_run("\t")
 
 
-def _get_or_create_paragraph(header_footer):
+def _get_or_create_paragraph(
+    header_footer: HeaderPart | FooterPart,
+) -> Paragraph:
     """Get the first paragraph or create a new one, clearing existing content."""
     if header_footer.paragraphs:
         paragraph = header_footer.paragraphs[0]
@@ -193,7 +179,7 @@ def _get_or_create_paragraph(header_footer):
     return paragraph
 
 
-def _setup_tab_stops(paragraph):
+def _setup_tab_stops(paragraph: Paragraph) -> None:
     """Set up standard tab stops for header/footer layout."""
     tab_stops = paragraph.paragraph_format.tab_stops
     tab_stops.clear_all()
@@ -202,13 +188,13 @@ def _setup_tab_stops(paragraph):
 
 
 def _add_formatted_content(
-    paragraph,
-    content_text,
-    style_def,
-    style_attributes_names_mapping,
-    field_mappings,
-    font_mapping,
-):
+    paragraph: Paragraph,
+    content_text: str,
+    style_def: dict[str, str | dict[str, str]],
+    style_attributes_names_mapping: dict[str, str],
+    field_mappings: list[tuple[str, str]],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """Add formatted content to a paragraph."""
     run = paragraph.add_run()
     _apply_font_formatting_integrated(
@@ -217,7 +203,9 @@ def _add_formatted_content(
     _add_content_with_fields_native(run, content_text, field_mappings)
 
 
-def _has_content_after(content_positions, current_position):
+def _has_content_after(
+    content_positions: list[tuple[str, str, bool]], current_position: str
+) -> bool:
     """Check if there's any content in positions after the current one."""
     current_index = next(
         i for i, (pos, _, _) in enumerate(content_positions) if pos == current_position
@@ -228,8 +216,11 @@ def _has_content_after(content_positions, current_position):
 
 
 def _apply_font_formatting_integrated(
-    run, style_def: dict, style_attributes_names_mapping: dict, font_mapping
-):
+    run: Run,
+    style_def: dict[str, str | dict[str, str]],
+    style_attributes_names_mapping: dict[str, str],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """Apply font formatting using the existing style application system."""
     font_def = style_def.get(
         style_attributes_names_mapping.get("font_format", "font_format"), {}
@@ -243,7 +234,9 @@ def _apply_font_formatting_integrated(
     )
 
 
-def _add_content_with_fields_native(run, content_text, field_mappings):
+def _add_content_with_fields_native(
+    run: Run, content_text: str, field_mappings: list[tuple[str, str]]
+) -> None:
     """Add content with field processing using a cleaner approach."""
     has_fields = any(
         re.search(pattern, content_text, re.IGNORECASE) for pattern, _ in field_mappings
@@ -255,21 +248,14 @@ def _add_content_with_fields_native(run, content_text, field_mappings):
 
 
 def apply_header_footer_to_all_sections(
-    doc,
-    header_footer_config: dict,
-    style_attributes_names_mapping: dict,
-    field_mappings: dict,
-    font_mapping: dict,
-    layout_config: dict,
-):
-    """
-    Apply header and footer styles to all sections in the document.
-
-    Args:
-        doc: The docx Document object
-        header_footer_config: Configuration dictionary containing header/footer rules
-        style_attributes_names_mapping: Mapping for style attribute names
-    """
+    doc: Document,
+    header_footer_config: dict[str, dict[str, str | dict[str, str]]],
+    style_attributes_names_mapping: dict[str, str],
+    field_mappings: list[tuple[str, str]],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+    layout_config: dict[str, bool],
+) -> None:
+    """Apply header and footer styles to all sections in the document."""
     for section in doc.sections:
         header_style = header_footer_config.get("header_style", {})
         header_content = header_footer_config.get("header_content", {})
@@ -302,15 +288,10 @@ def apply_header_footer_to_all_sections(
             )
 
 
-def _add_content_with_dynamic_fields(run_element, content_text, field_mappings):
-    """
-    Add content to a run element, processing dynamic field placeholders.
-
-    Args:
-        run_element: The XML run element to add content to
-        content_text: Text content that may contain dynamic field placeholders
-        field_mappings: Field mapping configuration
-    """
+def _add_content_with_dynamic_fields(
+    run_element: OxmlElement, content_text: str, field_mappings: list[tuple[str, str]]
+) -> None:
+    """Add content to a run element, processing dynamic field placeholders."""
     remaining_text = content_text
 
     while remaining_text:
@@ -347,7 +328,7 @@ def _add_content_with_dynamic_fields(run_element, content_text, field_mappings):
             break
 
 
-def _add_field_code(run_element, field_code):
+def _add_field_code(run_element: OxmlElement, field_code: str) -> None:
     """Add a Word field code to a run element using fldSimple approach."""
     fld_simple = OxmlElement("w:fldSimple")
     fld_simple.set(qn("w:instr"), field_code)
