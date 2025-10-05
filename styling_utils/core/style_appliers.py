@@ -1,10 +1,19 @@
+import contextlib
+from typing import Callable
+
+from docx.document import Document
+from docx.styles.style import BaseStyle
+from docx.text.font import Font
+from docx.text.paragraph import ParagraphFormat
+
+
 def apply_docx_style_definitions(
-    doc,
-    style_definitions: dict,
-    style_attributes_names_mapping: dict,
-    font_mapping: dict,
-    paragraph_format_mapping: dict,
-):
+    doc: Document,
+    style_definitions: dict[str, dict[str, str | dict[str, str]]],
+    style_attributes_names_mapping: dict[str, str],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+    paragraph_format_mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """
     Apply a set of style definitions from a configuration dictionary to a docx Document.
 
@@ -21,12 +30,10 @@ def apply_docx_style_definitions(
             continue
 
         if style_attributes_names_mapping["based_on"] in style_def:
-            try:
+            with contextlib.suppress(KeyError):
                 style_obj.base_style = doc.styles[
                     style_def[style_attributes_names_mapping["based_on"]]
                 ]
-            except KeyError:
-                pass
 
         apply_docx_style_attributes(
             style_obj=style_obj,
@@ -38,12 +45,12 @@ def apply_docx_style_definitions(
 
 
 def apply_docx_style_attributes(
-    style_obj,
-    style_def: dict,
-    style_attributes_names_mapping: dict,
-    font_mapping: dict,
-    paragraph_format_mapping: dict,
-):
+    style_obj: BaseStyle,
+    style_def: dict[str, str | dict[str, str]],
+    style_attributes_names_mapping: dict[str, str],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+    paragraph_format_mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """
     Apply font and paragraph formatting attributes from a style definition to a docx style object.
     """
@@ -65,7 +72,11 @@ def apply_docx_style_attributes(
         )
 
 
-def map_config_to_docx_attributes(target, config_data: dict, mapping: dict):
+def map_config_to_docx_attributes(
+    target: Font | ParagraphFormat,
+    config_data: dict[str, str | int | float | bool],
+    mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """
     Map configuration dictionary keys to docx object attributes using mapping rules.
 
