@@ -1,10 +1,14 @@
+from docx.document import Document
+
 from ..numbering.numbering_utils import (
     process_paragraph_text,
     update_paragraph_numbering,
 )
 
 
-def apply_chapter_page_breaks(doc, style_names_mapping):
+def apply_chapter_page_breaks(
+    doc: Document, style_names_mapping: dict[str, str]
+) -> None:
     """
     Ensure only the first paragraph of each 'chapter_titles' block starts on a new page.
     """
@@ -20,12 +24,12 @@ def apply_chapter_page_breaks(doc, style_names_mapping):
 
 
 def apply_chapter_section_numbering_format(
-    doc,
-    style_definitions: dict,
-    style_attributes_names_mapping: dict,
-    chapter_section_numbering_regex: dict,
-    renumbering_regex=None,
-):
+    doc: Document,
+    style_definitions: dict[str, dict[str, str | dict[str, str]]],
+    style_attributes_names_mapping: dict[str, str],
+    chapter_section_numbering_regex: dict[str, str],
+    renumbering_regex: dict[str, str] | None = None,
+) -> None:
     """
     Adjust numbering in chapter/section titles based on YAML config.
     - numbering_format: { type: ROMAN|ARABIC, side: LEFT|RIGHT, separator: " " }
@@ -61,13 +65,13 @@ def apply_chapter_section_numbering_format(
 
 
 def apply_section_numbering_order(
-    doc,
-    style_names_mapping,
-    style_definitions=None,
-    style_attributes_names_mapping=None,
-    chapter_section_numbering_regex=None,
-    renumbering_regex=None,
-):
+    doc: Document,
+    style_names_mapping: dict[str, str],
+    style_definitions: dict[str, dict[str, str | dict[str, str]]] | None = None,
+    style_attributes_names_mapping: dict[str, str] | None = None,
+    chapter_section_numbering_regex: dict[str, str] | None = None,
+    renumbering_regex: dict[str, str] | None = None,
+) -> None:
     """
     Adjust section numbering based on hierarchy:
     1. Find first paragraph with style chapter_titles and assign current_chapter = 1
