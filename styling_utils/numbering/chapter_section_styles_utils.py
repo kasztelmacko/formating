@@ -1,4 +1,4 @@
-from styling_utils.numbering_utils import process_paragraph_text, update_paragraph_numbering
+from styling_utils.numbering.numbering_utils import process_paragraph_text, update_paragraph_numbering
 
 def enforce_chapter_page_breaks(doc, style_names_mapping):
     """

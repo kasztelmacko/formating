@@ -3,8 +3,8 @@ from docx.oxml import OxmlElement
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
 from docx.shared import Inches
 import re
-from style_mapping_config import HEADER_FOOTER_FIELD_MAPPINGS, HEADER_FOOTER_LAYOUT_CONFIG, FONT_MAPPING
-from styling_utils.style_appliers import map_config_to_docx_attributes
+from config import HEADER_FOOTER_FIELD_MAPPINGS, HEADER_FOOTER_LAYOUT_CONFIG, FONT_MAPPING
+from styling_utils.core.style_appliers import map_config_to_docx_attributes
 
 def apply_header_footer_styles(doc, header_footer_config: dict, style_attributes_names_mapping: dict, 
                               field_mappings: dict, font_mapping: dict, layout_config: dict):

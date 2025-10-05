@@ -1,4 +1,4 @@
-from style_mapping_config import _arabic_to_roman, _roman_to_arabic, RENUMBERING_REGEX, expand_common_pattern
+from config import _arabic_to_roman, _roman_to_arabic, RENUMBERING_REGEX, expand_common_pattern
 import re
 
 

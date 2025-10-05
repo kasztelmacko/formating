@@ -1,7 +1,7 @@
 from docx import Document
-from styling_utils.style_appliers import apply_docx_style_definitions
-from styling_utils.numbering_utils import apply_chapter_based_numbering
-import style_mapping_config as MAPING_CONF
+from styling_utils.core.style_appliers import apply_docx_style_definitions
+from styling_utils.numbering.numbering_utils import apply_chapter_based_numbering
+import config as MAPING_CONF
 
 
 def apply_table_figure_styles(doc: Document, config):

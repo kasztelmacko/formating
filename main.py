@@ -1,8 +1,7 @@
 import docx
-import os
 from document_formatter_config import DocumentFormatterConfig
 from document_formatting_agent import DocumentFormattingAgent
-from config import INPUT_DOCX, INPUT_DIR, STYLE_CONFIG_FILENAME, STYLE_SCHEMA_FILENAME, OUTPUT_DOCX
+from paths import INPUT_DOCX, INPUT_DIR, STYLE_CONFIG_FILENAME, STYLE_SCHEMA_FILENAME, OUTPUT_DOCX
 
 doc = docx.Document(INPUT_DOCX)
 formatter_config = DocumentFormatterConfig.load_and_validate_yaml(
