@@ -82,7 +82,9 @@ class DocumentFormattingAgent:
             doc=self.doc, 
             list_config=self.config.list_rules, 
             bullet_character_options=MAPPING_CONF.BULLET_CHARACTER_OPTIONS,
-            w_tags=MAPPING_CONF.W_TAGS
+            w_tags=MAPPING_CONF.W_TAGS,
+            default_nested_config=MAPPING_CONF.DEFAULT_NESTED_LEVEL_CONFIG,
+            default_indentation=MAPPING_CONF.DEFAULT_BULLET_LIST_INDENTATION
         )
         apply_chapter_page_breaks(
             doc=self.doc, 

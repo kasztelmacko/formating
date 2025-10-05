@@ -45,6 +45,6 @@ class DocumentFormatterConfig:
         try:
             validate(instance=style_config, schema=style_schema)
         except ValidationError as e:
-            raise ValueError(f"❌ YAML validation error: {e.message}") from e
+            raise ValueError(f"YAML validation error: {e.message}") from e
 
         return cls(style_config)

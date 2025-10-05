@@ -166,15 +166,13 @@ document_formatter_config:
 
   ## Enumerated List Rules
   list_rules:
-    bullet_char: dash
     paragraph_format:
       alignment: LEFT
     list_item_termination:
       intermediate: ""
       last_item: "."
-    indent:
-      left: 360
-      hanging: 360
+    bullet_list_level_0:
+      bullet_char: dash
 
   ## Header and Footer Rules
   header_footer_rules:

@@ -37,7 +37,34 @@ BULLET_CHARACTER_OPTIONS = {
     "circle": "○",
     "dash": "–",
     "star": "★",
-    "check": "✓"
+    "check": "✓",
+    "triangle": "▶",
+    "plus": "+",
+    "minus": "−",
+    "dot": "·",
+    "hyphen": "-",
+    "en_dash": "–",
+    "em_dash": "—"
+}
+
+# Default nested level configurations
+DEFAULT_NESTED_LEVEL_CONFIG = {
+    0: {"bullet_char": "bullet", "left": 360, "hanging": 360},
+    1: {"bullet_char": "circle", "left": 720, "hanging": 360},
+    2: {"bullet_char": "square", "left": 1080, "hanging": 360},
+    3: {"bullet_char": "diamond", "left": 1440, "hanging": 360},
+    4: {"bullet_char": "triangle", "left": 1800, "hanging": 360},
+    5: {"bullet_char": "star", "left": 2160, "hanging": 360},
+    6: {"bullet_char": "check", "left": 2520, "hanging": 360},
+    7: {"bullet_char": "plus", "left": 2880, "hanging": 360},
+    8: {"bullet_char": "minus", "left": 3240, "hanging": 360}
+}
+
+# Default indentation values for bullet lists
+DEFAULT_BULLET_LIST_INDENTATION = {
+    "left": 360,
+    "hanging": 360,
+    "increment": 360
 }
 
 # Header/Footer field mappings

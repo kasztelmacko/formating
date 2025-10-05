@@ -134,10 +134,66 @@ properties:
         properties:
           paragraph_format: { $ref: "#/$defs/StyleDefinition/properties/paragraph_format" }
           list_item_termination: { type: object }
-          bullet_char: { type: string }
-          indent:
+          bullet_list_level_0:
             type: object
             properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_1:
+            type: object
+            properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_2:
+            type: object
+            properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_3:
+            type: object
+            properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_4:
+            type: object
+            properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_5:
+            type: object
+            properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_6:
+            type: object
+            properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_7:
+            type: object
+            properties:
+              bullet_char: { type: string }
+              left: { type: integer }
+              hanging: { type: integer }
+            additionalProperties: false
+          bullet_list_level_8:
+            type: object
+            properties:
+              bullet_char: { type: string }
               left: { type: integer }
               hanging: { type: integer }
             additionalProperties: false

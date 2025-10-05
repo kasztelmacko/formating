@@ -17,37 +17,20 @@ def apply_list_indentation(level: Element, left: int, hanging: int, w_tags: dict
     ind.set(w_tags['left'], str(left))
     ind.set(w_tags['hanging'], str(hanging))
 
-def apply_bullet_character_updates(doc, list_config: dict, bullet_character_options: dict, w_tags: dict):
+def apply_bullet_character_updates(doc, list_config: dict, bullet_character_options: dict, w_tags: dict, default_nested_config: dict = None, default_indentation: dict = None):
     """
     Update bullet characters and indentation in the document based on list_config.
+    Uses bullet_list_level_X configuration with inheritance from parent levels.
     Termination characters are applied later to paragraph text.
     """
     if not list_config:
-        return
-        
-    bullet_char = list_config.get("bullet_char")
-    indent_cfg = list_config.get("indent", {})
-    
-    left = indent_cfg.get("left")
-    hanging = indent_cfg.get("hanging")
- 
-    if not bullet_char and left is None and hanging is None:
         return
 
     numbering_xml = doc.part.numbering_part._element
     abstract_nums = numbering_xml.findall(f'.//{w_tags["abstractNum"]}')
 
-    for abstract_num in abstract_nums:
-        levels = abstract_num.findall(f'.//{w_tags["lvl"]}')
-        for level in levels:
-            if left is not None and hanging is not None:
-                apply_list_indentation(level, left, hanging, w_tags)
-
-            if bullet_char and bullet_char in bullet_character_options:
-                lvl_text = ensure_child(level, w_tags['lvlText'])
-                lvl_text.set(w_tags['val'], bullet_character_options[bullet_char])
-
-            _remove_bullet_font_formatting(level, w_tags)
+    bullet_levels = _extract_bullet_level_configs(list_config)
+    _apply_bullet_configuration_with_inheritance(doc, bullet_levels, bullet_character_options, w_tags, abstract_nums, default_nested_config, default_indentation)
 
 def apply_list_termination_characters(doc, list_config: dict, w_tags: dict):
     """
@@ -168,6 +151,240 @@ def find_all_list_paragraphs(doc, w_tags: dict):
             list_paragraphs.append((paragraph, num_id, level))
     
     return list_paragraphs
+
+
+def _extract_bullet_level_configs(list_config: dict) -> dict:
+    """
+    Extract bullet list level configurations from the config.
+    Looks for bullet_list_level_0, bullet_list_level_1, etc.
+    """
+    bullet_levels = {}
+    
+    for key, value in list_config.items():
+        if key.startswith("bullet_list_level_"):
+            try:
+                level_num = int(key.split("_")[-1])
+                if 0 <= level_num <= 8:
+                    bullet_levels[level_num] = value
+            except (ValueError, IndexError):
+                continue
+    
+    return bullet_levels
+
+
+def _apply_bullet_configuration_with_inheritance(doc, bullet_levels: dict, bullet_character_options: dict, w_tags: dict, abstract_nums, default_nested_config: dict, default_indentation: dict):
+    """
+    Apply bullet configuration with inheritance from parent levels.
+    If a level doesn't have a bullet_char specified, it inherits from the parent level.
+    If indentation is not specified, uses default indentation values.
+    """
+    for abstract_num in abstract_nums:
+        levels = abstract_num.findall(f'.//{w_tags["lvl"]}')
+        
+        for level in levels:
+            level_num = _get_level_number(level, w_tags)
+            
+            # Get configuration for this level with inheritance
+            level_config = _get_level_config_with_inheritance(level_num, bullet_levels, default_nested_config, default_indentation)
+            
+            if not level_config:
+                continue
+                
+            # Apply indentation
+            left = level_config.get("left")
+            hanging = level_config.get("hanging")
+            if left is not None and hanging is not None:
+                apply_list_indentation(level, left, hanging, w_tags)
+
+            # Apply bullet character
+            bullet_char = level_config.get("bullet_char")
+            if bullet_char and bullet_char in bullet_character_options:
+                lvl_text = ensure_child(level, w_tags['lvlText'])
+                lvl_text.set(w_tags['val'], bullet_character_options[bullet_char])
+
+            _remove_bullet_font_formatting(level, w_tags)
+
+
+def _get_level_config_with_inheritance(level_num: int, bullet_levels: dict, default_nested_config: dict, default_indentation: dict) -> dict:
+    """
+    Get configuration for a level with inheritance from parent levels.
+    If bullet_char is not specified, inherit from the nearest parent level.
+    If indentation is not specified, use default indentation values.
+    """
+    level_config = {}
+
+    # Add default config for indentation only (not bullet_char)
+    if default_nested_config and level_num in default_nested_config:
+        default_config = default_nested_config[level_num]
+        level_config.update({
+            'left': default_config.get('left'),
+            'hanging': default_config.get('hanging')
+        })
+
+    # Override with explicit configuration
+    if level_num in bullet_levels:
+        level_config.update(bullet_levels[level_num])
+
+    # Handle bullet character inheritance
+    if "bullet_char" not in level_config:
+        inherited_bullet = _find_inherited_bullet_char(level_num, bullet_levels, default_nested_config)
+        if inherited_bullet:
+            level_config["bullet_char"] = inherited_bullet
+        elif default_nested_config and level_num in default_nested_config:
+            default_bullet = default_nested_config[level_num].get("bullet_char")
+            if default_bullet:
+                level_config["bullet_char"] = default_bullet
+
+    # Handle indentation defaults
+    if default_indentation:
+        if "left" not in level_config:
+            # Calculate left indentation based on level
+            base_left = default_indentation.get("left", 360)
+            increment = default_indentation.get("increment", 360)
+            level_config["left"] = base_left + (level_num * increment)
+        
+        if "hanging" not in level_config:
+            level_config["hanging"] = default_indentation.get("hanging", 360)
+
+    return level_config
+
+
+def _find_inherited_bullet_char(level_num: int, bullet_levels: dict, default_nested_config: dict) -> str:
+    """
+    Find bullet character to inherit from parent levels.
+    Looks for the nearest parent level that has an explicit bullet_char configuration.
+    """
+    for parent_level in range(level_num - 1, -1, -1):
+        if parent_level in bullet_levels:
+            parent_config = bullet_levels[parent_level]
+            if "bullet_char" in parent_config:
+                return parent_config["bullet_char"]
+    if default_nested_config:
+        for parent_level in range(level_num - 1, -1, -1):
+            if parent_level in default_nested_config:
+                parent_config = default_nested_config[parent_level]
+                if "bullet_char" in parent_config:
+                    return parent_config["bullet_char"]
+    
+    return None
+
+
+def _get_level_number(level: Element, w_tags: dict) -> int:
+    """
+    Extract the level number from a level element.
+    """
+    try:
+        ilvl_attr = level.get(w_tags['ilvl'])
+        if ilvl_attr is not None:
+            return int(ilvl_attr)
+    except (ValueError, TypeError):
+        pass
+    return 0
+
+
+def analyze_list_structure(doc, w_tags: dict) -> dict:
+    """
+    Analyze the document's list structure to understand nesting patterns.
+    Returns a dictionary with information about list levels and their usage.
+    """
+    list_paragraphs_info = find_all_list_paragraphs(doc, w_tags)
+    
+    analysis = {
+        "total_list_items": len(list_paragraphs_info),
+        "levels_used": set(),
+        "level_distribution": {},
+        "max_nesting_depth": 0,
+        "list_groups": []
+    }
+    
+    current_group = []
+    current_num_id = None
+    
+    for para_info in list_paragraphs_info:
+        _, num_id, level = para_info
+        
+        analysis["levels_used"].add(level)
+        analysis["level_distribution"][level] = analysis["level_distribution"].get(level, 0) + 1
+        analysis["max_nesting_depth"] = max(analysis["max_nesting_depth"], level)
+        
+        if (num_id != current_num_id or 
+            (current_group and level == 0 and current_group[-1][2] > 0)):
+            
+            if current_group:
+                analysis["list_groups"].append({
+                    "num_id": current_num_id,
+                    "items": current_group,
+                    "levels": [item[2] for item in current_group]
+                })
+            
+            current_group = [para_info]
+            current_num_id = num_id
+        else:
+            current_group.append(para_info)
+    
+    if current_group:
+        analysis["list_groups"].append({
+            "num_id": current_num_id,
+            "items": current_group,
+            "levels": [item[2] for item in current_group]
+        })
+    
+    return analysis
+
+
+def preserve_nested_structure(doc, w_tags: dict) -> bool:
+    """
+    Ensure that nested list structure is preserved during formatting.
+    Returns True if structure is preserved, False if issues are detected.
+    """
+    analysis = analyze_list_structure(doc, w_tags)
+    
+    if analysis["max_nesting_depth"] > 0:
+        for group in analysis["list_groups"]:
+            levels = group["levels"]
+            for i in range(1, len(levels)):
+                if levels[i] > levels[i-1] + 1:
+                    print(f"Warning: Detected irregular nesting jump from level {levels[i-1]} to {levels[i]}")
+                    return False
+    
+    return True
+
+
+def get_level_specific_config(level: int, nested_levels: dict, default_config: dict) -> dict:
+    """
+    Get configuration for a specific list level, falling back to defaults if needed.
+    """
+    level_config = nested_levels.get(str(level), {})
+    if not level_config and default_config:
+        level_config = default_config.get(level, {})
+    
+    return level_config
+
+
+def validate_bullet_list_config(list_config: dict, bullet_character_options: dict) -> list:
+    """
+    Validate bullet list level configuration and return any issues found.
+    """
+    issues = []
+    bullet_levels = _extract_bullet_level_configs(list_config)
+    
+    for level_num, config in bullet_levels.items():
+        if level_num < 0 or level_num > 8:
+            issues.append(f"Level {level_num} is out of range (0-8)")
+            continue
+        
+        bullet_char = config.get("bullet_char")
+        if bullet_char and bullet_char not in bullet_character_options:
+            issues.append(f"Unknown bullet character '{bullet_char}' for level {level_num}")
+        
+        left = config.get("left")
+        hanging = config.get("hanging")
+        if left is not None and (not isinstance(left, int) or left < 0):
+            issues.append(f"Invalid left indentation {left} for level {level_num}")
+        if hanging is not None and (not isinstance(hanging, int) or hanging < 0):
+            issues.append(f"Invalid hanging indentation {hanging} for level {level_num}")
+    
+    return issues
 
 
 def _remove_bullet_font_formatting(level: Element, w_tags: dict):

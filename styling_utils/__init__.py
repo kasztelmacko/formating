@@ -13,7 +13,11 @@ from .formatting.paragraph_cleaning_utils import apply_paragraph_cleaning, apply
 from .formatting.bullet_list_styling_utils import (
     apply_bullet_character_updates, 
     apply_list_termination_characters,
-    find_all_list_paragraphs
+    find_all_list_paragraphs,
+    analyze_list_structure,
+    preserve_nested_structure,
+    get_level_specific_config,
+    validate_bullet_list_config
 )
 from .formatting.table_figure_titles_utils import apply_table_figure_styles, apply_source_styles
 from .numbering.numbering_utils import (
@@ -46,6 +50,10 @@ __all__ = [
     'apply_bullet_character_updates',
     'apply_list_termination_characters',
     'find_all_list_paragraphs',
+    'analyze_list_structure',
+    'preserve_nested_structure',
+    'get_level_specific_config',
+    'validate_bullet_list_config',
     'apply_table_figure_styles',
     'apply_source_styles',
     
