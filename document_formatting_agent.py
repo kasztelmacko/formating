@@ -1,4 +1,4 @@
-import config as MAPING_CONF
+import config as MAPPING_CONF
 from docx import Document
 
 from document_formatter_config import DocumentFormatterConfig
@@ -35,9 +35,9 @@ class DocumentFormattingAgent:
         apply_docx_style_definitions(
             doc=self.doc, 
             style_definitions=self.config.paragraph_styles, 
-            style_attributes_names_mapping=MAPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
-            font_mapping=MAPING_CONF.FONT_MAPPING,
-            paragraph_format_mapping=MAPING_CONF.PARAGRAPH_FORMAT_MAPPING
+            style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
+            font_mapping=MAPPING_CONF.FONT_MAPPING,
+            paragraph_format_mapping=MAPPING_CONF.PARAGRAPH_FORMAT_MAPPING
         )
 
     def apply_chapter_section_styles(self):
@@ -45,9 +45,9 @@ class DocumentFormattingAgent:
         apply_docx_style_definitions(
             doc=self.doc, 
             style_definitions=self.config.chapter_and_section_rules, 
-            style_attributes_names_mapping=MAPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
-            font_mapping=MAPING_CONF.FONT_MAPPING,
-            paragraph_format_mapping=MAPING_CONF.PARAGRAPH_FORMAT_MAPPING
+            style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
+            font_mapping=MAPPING_CONF.FONT_MAPPING,
+            paragraph_format_mapping=MAPPING_CONF.PARAGRAPH_FORMAT_MAPPING
         )
         
         refactor_section_numbering = self.config.document_setup.get("refactor_section_numbering", False)
@@ -56,16 +56,16 @@ class DocumentFormattingAgent:
             apply_section_numbering_order(
                 doc=self.doc,
                 style_definitions=self.config.chapter_and_section_rules,
-                style_names_mapping=MAPING_CONF.STYLE_NAMES_MAPPING,
-                style_attributes_names_mapping=MAPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
-                chapter_section_numbering_regex=MAPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
+                style_names_mapping=MAPPING_CONF.STYLE_NAMES_MAPPING,
+                style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
+                chapter_section_numbering_regex=MAPPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
             )
         else:
             apply_chapter_section_numbering_format(
                 doc=self.doc,
                 style_definitions=self.config.chapter_and_section_rules,
-                style_attributes_names_mapping=MAPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
-                chapter_section_numbering_regex=MAPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
+                style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
+                chapter_section_numbering_regex=MAPPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
             )
 
     def apply_table_figure_styles(self):
@@ -81,17 +81,17 @@ class DocumentFormattingAgent:
         apply_bullet_character_updates(
             doc=self.doc, 
             list_config=self.config.list_rules, 
-            bullet_character_options=MAPING_CONF.BULLET_CHARACTER_OPTIONS,
-            w_tags=MAPING_CONF.W_TAGS
+            bullet_character_options=MAPPING_CONF.BULLET_CHARACTER_OPTIONS,
+            w_tags=MAPPING_CONF.W_TAGS
         )
         apply_chapter_page_breaks(
             doc=self.doc, 
-            style_names_mapping=MAPING_CONF.STYLE_NAMES_MAPPING
+            style_names_mapping=MAPPING_CONF.STYLE_NAMES_MAPPING
         )
         apply_list_termination_characters(
             doc=self.doc, 
             list_config=self.config.list_rules,
-            w_tags=MAPING_CONF.W_TAGS
+            w_tags=MAPPING_CONF.W_TAGS
         )
 
     def apply_header_footer_styles(self):
@@ -99,10 +99,10 @@ class DocumentFormattingAgent:
         apply_header_footer_to_all_sections(
             doc=self.doc,
             header_footer_config=self.config.header_footer_rules,
-            style_attributes_names_mapping=MAPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
-            field_mappings=MAPING_CONF.HEADER_FOOTER_FIELD_MAPPINGS,
-            font_mapping=MAPING_CONF.FONT_MAPPING,
-            layout_config=MAPING_CONF.HEADER_FOOTER_LAYOUT_CONFIG,
+            style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
+            field_mappings=MAPPING_CONF.HEADER_FOOTER_FIELD_MAPPINGS,
+            font_mapping=MAPPING_CONF.FONT_MAPPING,
+            layout_config=MAPPING_CONF.HEADER_FOOTER_LAYOUT_CONFIG,
         )
 
     def clean_paragraphs(self):
