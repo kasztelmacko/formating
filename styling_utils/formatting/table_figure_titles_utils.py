@@ -1,19 +1,22 @@
-from docx import Document
+from typing import Callable
 
+from docx.document import Document
+
+from document_formatter_config import DocumentFormatterConfig
 from styling_utils.core.style_appliers import apply_docx_style_definitions
 from styling_utils.numbering.numbering_utils import apply_chapter_based_numbering
 
 
 def apply_table_figure_styles(
     doc: Document,
-    config,
-    style_attributes_names_mapping,
-    font_mapping,
-    paragraph_format_mapping,
-    style_names_mapping,
-    chapter_section_numbering_regex,
-    renumbering_regex,
-):
+    config: DocumentFormatterConfig,
+    style_attributes_names_mapping: dict[str, str],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+    paragraph_format_mapping: dict[str, tuple[str, Callable | None]],
+    style_names_mapping: dict[str, str],
+    chapter_section_numbering_regex: dict[str, str],
+    renumbering_regex: dict[str, str],
+) -> None:
     """Apply table and figure title styles from the configuration."""
     table_figure_styles = {}
     if "table_titles" in config.chapter_and_section_rules:
@@ -46,11 +49,11 @@ def apply_table_figure_styles(
 
 def apply_source_styles(
     doc: Document,
-    config,
-    style_attributes_names_mapping,
-    font_mapping,
-    paragraph_format_mapping,
-):
+    config: DocumentFormatterConfig,
+    style_attributes_names_mapping: dict[str, str],
+    font_mapping: dict[str, tuple[str, Callable | None]],
+    paragraph_format_mapping: dict[str, tuple[str, Callable | None]],
+) -> None:
     """Apply source text styles from the configuration."""
     if hasattr(config, "source_rules") and config.source_rules:
         apply_docx_style_definitions(
@@ -64,12 +67,12 @@ def apply_source_styles(
 
 def apply_table_figure_numbering(
     doc: Document,
-    config,
-    style_names_mapping,
-    style_attributes_names_mapping,
-    chapter_section_numbering_regex,
-    renumbering_regex,
-):
+    config: DocumentFormatterConfig,
+    style_names_mapping: dict[str, str],
+    style_attributes_names_mapping: dict[str, str],
+    chapter_section_numbering_regex: dict[str, str],
+    renumbering_regex: dict[str, str],
+) -> None:
     """Apply chapter-based numbering for table and figure titles using reusable utilities."""
     target_styles = []
     if "table_titles" in config.chapter_and_section_rules:
