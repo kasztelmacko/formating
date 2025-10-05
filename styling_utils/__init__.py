@@ -23,7 +23,7 @@ from .numbering.numbering_utils import (
     update_paragraph_numbering,
     apply_chapter_based_numbering
 )
-from .numbering.chapter_section_styles_utils import (
+from .formatting.chapter_section_styles_utils import (
     apply_chapter_page_breaks,
     apply_chapter_section_numbering_format,
     apply_section_numbering_order
