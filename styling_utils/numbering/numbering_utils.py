@@ -1,8 +1,33 @@
-from config import _arabic_to_roman, _roman_to_arabic, RENUMBERING_REGEX, expand_common_pattern
 import re
+import roman
+from config.patterns import BASE_PATTERNS
 
 
-def remove_all_numbering(text, common_pattern="", numbering_format="ARABIC"):
+def arabic_to_roman(num_str: str) -> str:
+    """Convert Arabic numerals to Roman numerals."""
+    return ".".join(roman.toRoman(int(p)) if p.isdigit() else p for p in num_str.split("."))
+
+
+def roman_to_arabic(roman_str: str) -> str:
+    """Convert Roman numerals to Arabic numerals."""
+    return ".".join(str(roman.fromRoman(p)) if p.isalpha() else p for p in roman_str.split("."))
+
+
+def expand_common_pattern(common_pattern, numbering_format="ARABIC"):
+    """Expand a common pattern string into a regex pattern."""
+    if not common_pattern:
+        return ""
+
+    if "number" not in common_pattern and "." not in common_pattern:
+        return common_pattern
+
+    number_type = numbering_format.upper()
+    number_pattern = BASE_PATTERNS["roman_number" if number_type == "ROMAN" else "arabic_number"]
+
+    return common_pattern.replace("number", number_pattern)
+
+
+def remove_all_numbering(text, common_pattern="", numbering_format="ARABIC", renumbering_regex=None):
     """Remove all existing numbering from text, including Roman numerals, Arabic numbers, and common patterns.
     This function carefully removes Roman numerals without affecting letters in normal words."""
     if not text.strip():
@@ -12,36 +37,36 @@ def remove_all_numbering(text, common_pattern="", numbering_format="ARABIC"):
         expanded_pattern = expand_common_pattern(common_pattern, numbering_format)
 
         if not any(char in expanded_pattern for char in ['\\', '(', ')', '[', ']']):
-            common_word_pattern = RENUMBERING_REGEX["common_word_pattern"].format(common_word=re.escape(expanded_pattern.strip()))
+            common_word_pattern = renumbering_regex["common_word_pattern"].format(common_word=re.escape(expanded_pattern.strip()))
             text = re.sub(common_word_pattern, '', text).strip()
         else:
             if '.' in expanded_pattern:
-                precise_pattern = RENUMBERING_REGEX["pattern_start"] + expanded_pattern + RENUMBERING_REGEX["pattern_end"]
+                precise_pattern = renumbering_regex["pattern_start"] + expanded_pattern + renumbering_regex["pattern_end"]
             else:
-                precise_pattern = RENUMBERING_REGEX["word_boundary"] + expanded_pattern + RENUMBERING_REGEX["word_boundary"]
+                precise_pattern = renumbering_regex["word_boundary"] + expanded_pattern + renumbering_regex["word_boundary"]
             text = re.sub(precise_pattern, '', text).strip()
 
     roman_patterns = [
-        RENUMBERING_REGEX["roman_uppercase"],
-        RENUMBERING_REGEX["roman_lowercase"]
+        renumbering_regex["roman_uppercase"],
+        renumbering_regex["roman_lowercase"]
     ]
     
     for pattern in roman_patterns:
         text = re.sub(pattern, '', text).strip()
 
-    text = re.sub(RENUMBERING_REGEX["arabic_numbers"], '', text).strip()
-    text = re.sub(RENUMBERING_REGEX["extra_spaces"], ' ', text).strip()
+    text = re.sub(renumbering_regex["arabic_numbers"], '', text).strip()
+    text = re.sub(renumbering_regex["extra_spaces"], ' ', text).strip()
 
-    text = re.sub(RENUMBERING_REGEX["leading_punctuation"], '', text)
-    text = re.sub(RENUMBERING_REGEX["trailing_punctuation"], '', text)
-    text = re.sub(RENUMBERING_REGEX["extra_spaces"], ' ', text).strip()
+    text = re.sub(renumbering_regex["leading_punctuation"], '', text)
+    text = re.sub(renumbering_regex["trailing_punctuation"], '', text)
+    text = re.sub(renumbering_regex["extra_spaces"], ' ', text).strip()
     
     return text
 
 
-def apply_numbering_to_text(text, new_numbering, numbering_format, numbering_side, separator=" ", chapter_section_numbering_regex=None, common_pattern="", common_pattern_side="LEFT", common_pattern_separator=" "):
+def apply_numbering_to_text(text, new_numbering, numbering_format, numbering_side, separator=" ", chapter_section_numbering_regex=None, common_pattern="", common_pattern_side="LEFT", common_pattern_separator=" ", renumbering_regex=None):
     """Apply new numbering to text by first removing all existing numbering, then applying the new numbering."""
-    cleaned_text = remove_all_numbering(text, common_pattern, numbering_format)
+    cleaned_text = remove_all_numbering(text, common_pattern, numbering_format, renumbering_regex)
 
     if common_pattern:
         expanded_pattern = expand_common_pattern(common_pattern, numbering_format)
@@ -78,7 +103,7 @@ def process_paragraph_text(text, numbering_format, numbering_side, regex_pattern
 
         source_num = match.group(number_group)
         
-        convert_number = _arabic_to_roman if numbering_format == "ROMAN" else _roman_to_arabic
+        convert_number = arabic_to_roman if numbering_format == "ROMAN" else roman_to_arabic
         new_numbering = convert_number(source_num)
 
         return apply_numbering_to_text(text, new_numbering, numbering_format, numbering_side, separator)
@@ -89,7 +114,8 @@ def process_paragraph_text(text, numbering_format, numbering_side, regex_pattern
 
 def update_paragraph_numbering(text, chapter_num, subchapter_level_2_num=None, subchapter_level_3_num=None, 
                                style_definitions=None, style_attributes_names_mapping=None, style_name=None,
-                               chapter_section_numbering_regex=None, common_pattern="", common_pattern_side="LEFT", common_pattern_separator=" "):
+                               chapter_section_numbering_regex=None, common_pattern="", common_pattern_side="LEFT", common_pattern_separator=" ",
+                               renumbering_regex=None):
     """Update paragraph text with new numbering based on the hierarchy level."""
     if not text.strip():
         return text
@@ -120,16 +146,16 @@ def update_paragraph_numbering(text, chapter_num, subchapter_level_2_num=None, s
         base_numbering = str(chapter_num)
 
     if numbering_type.upper() == "ROMAN":
-        new_numbering = _arabic_to_roman(base_numbering)
+        new_numbering = arabic_to_roman(base_numbering)
     else:
         new_numbering = base_numbering
 
-    return apply_numbering_to_text(text, new_numbering, numbering_type, numbering_side, separator, chapter_section_numbering_regex, common_pattern, common_pattern_side, common_pattern_separator)
+    return apply_numbering_to_text(text, new_numbering, numbering_type, numbering_side, separator, chapter_section_numbering_regex, common_pattern, common_pattern_side, common_pattern_separator, renumbering_regex)
 
 
 def apply_chapter_based_numbering(doc, style_names_mapping, style_definitions=None, 
                                  style_attributes_names_mapping=None, chapter_section_numbering_regex=None,
-                                 target_styles=None, use_common_pattern=True):
+                                 target_styles=None, use_common_pattern=True, renumbering_regex=None):
     """Apply chapter-based numbering for specified styles."""
     current_chapter = 0
     counters = {style: 0 for style in target_styles} if target_styles else {}
@@ -183,7 +209,8 @@ def apply_chapter_based_numbering(doc, style_names_mapping, style_definitions=No
                         chapter_section_numbering_regex,
                         common_pattern,
                         common_pattern_side,
-                        common_pattern_separator
+                        common_pattern_separator,
+                        renumbering_regex
                     )
     
     return counters

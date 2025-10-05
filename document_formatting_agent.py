@@ -58,23 +58,40 @@ class DocumentFormattingAgent:
                 style_definitions=self.config.chapter_and_section_rules,
                 style_names_mapping=MAPPING_CONF.STYLE_NAMES_MAPPING,
                 style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
-                chapter_section_numbering_regex=MAPPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
+                chapter_section_numbering_regex=MAPPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX,
+                renumbering_regex=MAPPING_CONF.RENUMBERING_REGEX
             )
         else:
             apply_chapter_section_numbering_format(
                 doc=self.doc,
                 style_definitions=self.config.chapter_and_section_rules,
                 style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
-                chapter_section_numbering_regex=MAPPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
+                chapter_section_numbering_regex=MAPPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX,
+                renumbering_regex=MAPPING_CONF.RENUMBERING_REGEX
             )
 
     def apply_table_figure_styles(self):
         """Apply table and figure title styles from the configuration."""
-        apply_table_figure_styles(doc=self.doc, config=self.config)
+        apply_table_figure_styles(
+            doc=self.doc, 
+            config=self.config,
+            style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
+            font_mapping=MAPPING_CONF.FONT_MAPPING,
+            paragraph_format_mapping=MAPPING_CONF.PARAGRAPH_FORMAT_MAPPING,
+            style_names_mapping=MAPPING_CONF.STYLE_NAMES_MAPPING,
+            chapter_section_numbering_regex=MAPPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX,
+            renumbering_regex=MAPPING_CONF.RENUMBERING_REGEX
+        )
 
     def apply_source_styles(self):
         """Apply source text styles from the configuration."""
-        apply_source_styles(doc=self.doc, config=self.config)
+        apply_source_styles(
+            doc=self.doc, 
+            config=self.config,
+            style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
+            font_mapping=MAPPING_CONF.FONT_MAPPING,
+            paragraph_format_mapping=MAPPING_CONF.PARAGRAPH_FORMAT_MAPPING
+        )
 
     def apply_list_styles(self):
         """Apply bullet list rules from the configuration."""
@@ -119,6 +136,7 @@ class DocumentFormattingAgent:
                 trim_spaces=trim_spaces
             )
             apply_empty_paragraph_removal(
-                paragraph=paragraph
+                paragraph=paragraph,
+                openxml_formats=MAPPING_CONF.OPENXML_FORMATS
             )
 

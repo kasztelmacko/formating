@@ -18,7 +18,8 @@ def apply_chapter_section_numbering_format(
     doc,
     style_definitions: dict,
     style_attributes_names_mapping: dict,
-    chapter_section_numbering_regex: dict
+    chapter_section_numbering_regex: dict,
+    renumbering_regex=None
 ):
     """
     Adjust numbering in chapter/section titles based on YAML config.
@@ -53,7 +54,7 @@ def apply_chapter_section_numbering_format(
 
 
 
-def apply_section_numbering_order(doc, style_names_mapping, style_definitions=None, style_attributes_names_mapping=None, chapter_section_numbering_regex=None):
+def apply_section_numbering_order(doc, style_names_mapping, style_definitions=None, style_attributes_names_mapping=None, chapter_section_numbering_regex=None, renumbering_regex=None):
     """
     Adjust section numbering based on hierarchy:
     1. Find first paragraph with style chapter_titles and assign current_chapter = 1
@@ -85,7 +86,7 @@ def apply_section_numbering_order(doc, style_names_mapping, style_definitions=No
                 paragraph.text = update_paragraph_numbering(
                     paragraph.text, current_chapter, None, None, 
                     style_definitions, style_attributes_names_mapping, style_name,
-                    chapter_section_numbering_regex
+                    chapter_section_numbering_regex, renumbering_regex=renumbering_regex
                 )
             
         elif style_name == style_names_mapping["subchapter_titles_level_2"]:
@@ -96,7 +97,7 @@ def apply_section_numbering_order(doc, style_names_mapping, style_definitions=No
                 paragraph.text = update_paragraph_numbering(
                     paragraph.text, current_chapter, current_subchapter_level_2, None,
                     style_definitions, style_attributes_names_mapping, style_name,
-                    chapter_section_numbering_regex
+                    chapter_section_numbering_regex, renumbering_regex=renumbering_regex
                 )
             
         elif style_name == style_names_mapping["subchapter_titles_level_3"]:
@@ -106,7 +107,7 @@ def apply_section_numbering_order(doc, style_names_mapping, style_definitions=No
                 paragraph.text = update_paragraph_numbering(
                     paragraph.text, current_chapter, current_subchapter_level_2, current_subchapter_level_3,
                     style_definitions, style_attributes_names_mapping, style_name,
-                    chapter_section_numbering_regex
+                    chapter_section_numbering_regex, renumbering_regex=renumbering_regex
                 )
         else:
             chapter_numbering_applied = False

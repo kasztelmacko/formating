@@ -1,7 +1,7 @@
 """
 Configuration package for document formatting.
 
-This package provides all configuration constants, mappings, patterns, and utilities
+This package provides all configuration constants, mappings, and patterns
 used throughout the document formatting system.
 
 For backward compatibility, this module exports all the same names as the original
@@ -34,15 +34,6 @@ from .patterns import (
     W_TAGS,
 )
 
-# Import all utility functions
-from .utils import (
-    _hex_to_rgbcolor,
-    _arabic_to_roman,
-    _roman_to_arabic,
-    _resolve_enum,
-    expand_common_pattern,
-)
-
 # Export everything for backward compatibility
 __all__ = [
     # Constants
@@ -52,7 +43,7 @@ __all__ = [
     'HEADER_FOOTER_FIELD_MAPPINGS',
     'HEADER_FOOTER_LAYOUT_CONFIG',
     'DEFAULT_NESTED_LEVEL_CONFIG',
-    'DEFAULT_BULLET_LIST_INDENTATION'
+    'DEFAULT_BULLET_LIST_INDENTATION',
     
     # Mappings
     'FONT_MAPPING',
@@ -64,11 +55,4 @@ __all__ = [
     'RENUMBERING_REGEX',
     'OPENXML_FORMATS',
     'W_TAGS',
-    
-    # Utility functions
-    '_hex_to_rgbcolor',
-    '_arabic_to_roman',
-    '_roman_to_arabic',
-    '_resolve_enum',
-    'expand_common_pattern',
 ]
