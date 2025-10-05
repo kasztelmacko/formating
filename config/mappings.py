@@ -4,8 +4,9 @@ Style and attribute mappings for document formatting.
 This module contains mappings between configuration keys and docx object attributes.
 """
 
-from docx.shared import Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_COLOR_INDEX
+from docx.shared import Cm, Pt
+
 from .formatting_utils import hex_to_rgbcolor, resolve_enum
 
 # Font attribute mappings

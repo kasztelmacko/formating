@@ -1,7 +1,9 @@
 import os
-import yaml
 from typing import Any, Dict
-from jsonschema import validate, ValidationError
+
+import yaml
+from jsonschema import ValidationError, validate
+
 
 class DocumentFormatterConfig:
     def __init__(self, config: Dict[str, Any]):
@@ -28,7 +30,7 @@ class DocumentFormatterConfig:
         if not os.path.exists(path):
             raise FileNotFoundError(f"File not found: {path}")
 
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f)
 
     @classmethod

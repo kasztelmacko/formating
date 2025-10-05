@@ -11,7 +11,7 @@ from docx.shared import RGBColor
 def hex_to_rgbcolor(hex_str):
     """Convert '#RRGGBB' string into docx RGBColor."""
     hex_str = hex_str.lstrip("#")
-    r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
+    r, g, b = (int(hex_str[i : i + 2], 16) for i in (0, 2, 4))
     return RGBColor(r, g, b)
 
 
