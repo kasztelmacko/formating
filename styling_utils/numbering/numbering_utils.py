@@ -1,6 +1,8 @@
 import re
+from typing import Pattern
 
 import roman
+from docx.document import Document
 
 from config.patterns import BASE_PATTERNS
 
@@ -19,7 +21,7 @@ def roman_to_arabic(roman_str: str) -> str:
     )
 
 
-def expand_common_pattern(common_pattern, numbering_format="ARABIC"):
+def expand_common_pattern(common_pattern: str, numbering_format: str = "ARABIC") -> str:
     """Expand a common pattern string into a regex pattern."""
     if not common_pattern:
         return ""
@@ -36,8 +38,11 @@ def expand_common_pattern(common_pattern, numbering_format="ARABIC"):
 
 
 def remove_all_numbering(
-    text, common_pattern="", numbering_format="ARABIC", renumbering_regex=None
-):
+    text: str,
+    common_pattern: str = "",
+    numbering_format: str = "ARABIC",
+    renumbering_regex: dict[str, str] | None = None,
+) -> str:
     """Remove all existing numbering from text, including Roman numerals, Arabic numbers, and common patterns.
     This function carefully removes Roman numerals without affecting letters in normal words."""
     if not text.strip():
@@ -85,17 +90,17 @@ def remove_all_numbering(
 
 
 def apply_numbering_to_text(
-    text,
-    new_numbering,
-    numbering_format,
-    numbering_side,
-    separator=" ",
-    chapter_section_numbering_regex=None,
-    common_pattern="",
-    common_pattern_side="LEFT",
-    common_pattern_separator=" ",
-    renumbering_regex=None,
-):
+    text: str,
+    new_numbering: str,
+    numbering_format: str,
+    numbering_side: str,
+    separator: str = " ",
+    chapter_section_numbering_regex: dict[str, str] | None = None,
+    common_pattern: str = "",
+    common_pattern_side: str = "LEFT",
+    common_pattern_separator: str = " ",
+    renumbering_regex: dict[str, str] | None = None,
+) -> str:
     """Apply new numbering to text by first removing all existing numbering, then applying the new numbering."""
     cleaned_text = remove_all_numbering(
         text, common_pattern, numbering_format, renumbering_regex
@@ -123,8 +128,12 @@ def apply_numbering_to_text(
 
 
 def process_paragraph_text(
-    text, numbering_format, numbering_side, regex_patterns, separator=" "
-):
+    text: str,
+    numbering_format: str,
+    numbering_side: str,
+    regex_patterns: dict[str, Pattern[str]],
+    separator: str = " ",
+) -> str:
     """Process a single paragraph's text to convert numbering."""
 
     pattern_key = f"{numbering_format.lower()}_{numbering_side.lower()}"
@@ -156,19 +165,19 @@ def process_paragraph_text(
 
 
 def update_paragraph_numbering(
-    text,
-    chapter_num,
-    subchapter_level_2_num=None,
-    subchapter_level_3_num=None,
-    style_definitions=None,
-    style_attributes_names_mapping=None,
-    style_name=None,
-    chapter_section_numbering_regex=None,
-    common_pattern="",
-    common_pattern_side="LEFT",
-    common_pattern_separator=" ",
-    renumbering_regex=None,
-):
+    text: str,
+    chapter_num: int,
+    subchapter_level_2_num: int | None = None,
+    subchapter_level_3_num: int | None = None,
+    style_definitions: dict[str, dict[str, str | dict[str, str]]] | None = None,
+    style_attributes_names_mapping: dict[str, str] | None = None,
+    style_name: str | None = None,
+    chapter_section_numbering_regex: dict[str, str] | None = None,
+    common_pattern: str = "",
+    common_pattern_side: str = "LEFT",
+    common_pattern_separator: str = " ",
+    renumbering_regex: dict[str, str] | None = None,
+) -> str:
     """Update paragraph text with new numbering based on the hierarchy level."""
     if not text.strip():
         return text
@@ -230,15 +239,15 @@ def update_paragraph_numbering(
 
 
 def apply_chapter_based_numbering(
-    doc,
-    style_names_mapping,
-    style_definitions=None,
-    style_attributes_names_mapping=None,
-    chapter_section_numbering_regex=None,
-    target_styles=None,
-    use_common_pattern=True,
-    renumbering_regex=None,
-):
+    doc: Document,
+    style_names_mapping: dict[str, str],
+    style_definitions: dict[str, dict[str, str | dict[str, str]]] | None = None,
+    style_attributes_names_mapping: dict[str, str] | None = None,
+    chapter_section_numbering_regex: dict[str, str] | None = None,
+    target_styles: list[str] | None = None,
+    use_common_pattern: bool = True,
+    renumbering_regex: dict[str, str] | None = None,
+) -> dict[str, int]:
     """Apply chapter-based numbering for specified styles."""
     current_chapter = 0
     counters = {style: 0 for style in target_styles} if target_styles else {}
@@ -259,60 +268,58 @@ def apply_chapter_based_numbering(
         else:
             chapter_numbering_applied = False
 
-        if target_styles and style_name in [
-            style_names_mapping.get(style) for style in target_styles
-        ]:
-            if in_chapter:
-                target_style = None
-                for style in target_styles:
-                    if style_name == style_names_mapping.get(style):
-                        target_style = style
-                        break
+        if (
+            target_styles
+            and style_name
+            in [style_names_mapping.get(style) for style in target_styles]
+            and in_chapter
+        ):
+            target_style = None
+            for style in target_styles:
+                if style_name == style_names_mapping.get(style):
+                    target_style = style
+                    break
 
-                if target_style:
-                    counters[target_style] += 1
-                    new_numbering = f"{current_chapter}.{counters[target_style]}"
+            if target_style:
+                counters[target_style] += 1
+                new_numbering = f"{current_chapter}.{counters[target_style]}"
 
-                    style_def = (
-                        style_definitions.get(target_style, {})
-                        if style_definitions
-                        else {}
-                    )
-                    numbering_def = style_def.get(
+                style_def = (
+                    style_definitions.get(target_style, {}) if style_definitions else {}
+                )
+                numbering_def = style_def.get(
+                    style_attributes_names_mapping.get(
+                        "numbering_format", "numbering_format"
+                    ),
+                    {},
+                )
+
+                common_pattern = ""
+                common_pattern_side = "LEFT"
+                common_pattern_separator = " "
+
+                if use_common_pattern:
+                    common_pattern_def = style_def.get(
                         style_attributes_names_mapping.get(
-                            "numbering_format", "numbering_format"
+                            "common_pattern_format", "common_pattern_format"
                         ),
                         {},
                     )
+                    common_pattern = common_pattern_def.get("pattern", "")
+                    common_pattern_side = common_pattern_def.get("side", "LEFT")
+                    common_pattern_separator = common_pattern_def.get("separator", " ")
 
-                    common_pattern = ""
-                    common_pattern_side = "LEFT"
-                    common_pattern_separator = " "
-
-                    if use_common_pattern:
-                        common_pattern_def = style_def.get(
-                            style_attributes_names_mapping.get(
-                                "common_pattern_format", "common_pattern_format"
-                            ),
-                            {},
-                        )
-                        common_pattern = common_pattern_def.get("pattern", "")
-                        common_pattern_side = common_pattern_def.get("side", "LEFT")
-                        common_pattern_separator = common_pattern_def.get(
-                            "separator", " "
-                        )
-
-                    paragraph.text = apply_numbering_to_text(
-                        paragraph.text,
-                        new_numbering,
-                        numbering_def.get("type", "ARABIC"),
-                        numbering_def.get("side", "LEFT"),
-                        numbering_def.get("separator", " "),
-                        chapter_section_numbering_regex,
-                        common_pattern,
-                        common_pattern_side,
-                        common_pattern_separator,
-                        renumbering_regex,
-                    )
+                paragraph.text = apply_numbering_to_text(
+                    paragraph.text,
+                    new_numbering,
+                    numbering_def.get("type", "ARABIC"),
+                    numbering_def.get("side", "LEFT"),
+                    numbering_def.get("separator", " "),
+                    chapter_section_numbering_regex,
+                    common_pattern,
+                    common_pattern_side,
+                    common_pattern_separator,
+                    renumbering_regex,
+                )
 
     return counters
