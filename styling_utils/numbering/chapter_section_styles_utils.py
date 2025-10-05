@@ -1,6 +1,6 @@
 from styling_utils.numbering.numbering_utils import process_paragraph_text, update_paragraph_numbering
 
-def enforce_chapter_page_breaks(doc, style_names_mapping):
+def apply_chapter_page_breaks(doc, style_names_mapping):
     """
     Ensure only the first paragraph of each 'chapter_titles' block starts on a new page.
     """
@@ -14,7 +14,7 @@ def enforce_chapter_page_breaks(doc, style_names_mapping):
         else:
             page_break_applied = False
 
-def adjust_chapter_section_numbering_format(
+def apply_chapter_section_numbering_format(
     doc,
     style_definitions: dict,
     style_attributes_names_mapping: dict,
@@ -53,7 +53,7 @@ def adjust_chapter_section_numbering_format(
 
 
 
-def adjust_section_numbering_order(doc, style_names_mapping, style_definitions=None, style_attributes_names_mapping=None, chapter_section_numbering_regex=None):
+def apply_section_numbering_order(doc, style_names_mapping, style_definitions=None, style_attributes_names_mapping=None, chapter_section_numbering_regex=None):
     """
     Adjust section numbering based on hierarchy:
     1. Find first paragraph with style chapter_titles and assign current_chapter = 1

@@ -12,9 +12,9 @@ from .numbering_utils import (
     apply_chapter_based_numbering
 )
 from .chapter_section_styles_utils import (
-    enforce_chapter_page_breaks,
-    adjust_chapter_section_numbering_format,
-    adjust_section_numbering_order
+    apply_chapter_page_breaks,
+    apply_chapter_section_numbering_format,
+    apply_section_numbering_order
 )
 
 __all__ = [
@@ -23,7 +23,7 @@ __all__ = [
     'process_paragraph_text',
     'update_paragraph_numbering',
     'apply_chapter_based_numbering',
-    'enforce_chapter_page_breaks',
-    'adjust_chapter_section_numbering_format',
-    'adjust_section_numbering_order',
+    'apply_chapter_page_breaks',
+    'apply_chapter_section_numbering_format',
+    'apply_section_numbering_order',
 ]

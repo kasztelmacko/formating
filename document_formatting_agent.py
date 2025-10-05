@@ -4,13 +4,13 @@ from docx import Document
 from document_formatter_config import DocumentFormatterConfig
 from styling_utils import (
     apply_docx_style_definitions,
-    clean_paragraph, 
-    remove_empty_paragraph,
-    update_bullet_characters, 
+    apply_paragraph_cleaning, 
+    apply_empty_paragraph_removal,
+    apply_bullet_character_updates, 
     apply_list_termination_characters,
-    enforce_chapter_page_breaks, 
-    adjust_chapter_section_numbering_format, 
-    adjust_section_numbering_order,
+    apply_chapter_page_breaks, 
+    apply_chapter_section_numbering_format, 
+    apply_section_numbering_order,
     apply_header_footer_to_all_sections,
     apply_table_figure_styles, 
     apply_source_styles
@@ -53,7 +53,7 @@ class DocumentFormattingAgent:
         refactor_section_numbering = self.config.document_setup.get("refactor_section_numbering", False)
         
         if refactor_section_numbering:
-            adjust_section_numbering_order(
+            apply_section_numbering_order(
                 doc=self.doc,
                 style_definitions=self.config.chapter_and_section_rules,
                 style_names_mapping=MAPING_CONF.STYLE_NAMES_MAPPING,
@@ -61,7 +61,7 @@ class DocumentFormattingAgent:
                 chapter_section_numbering_regex=MAPING_CONF.CHAPTER_SECTION_NUMBERING_REGEX
             )
         else:
-            adjust_chapter_section_numbering_format(
+            apply_chapter_section_numbering_format(
                 doc=self.doc,
                 style_definitions=self.config.chapter_and_section_rules,
                 style_attributes_names_mapping=MAPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
@@ -78,13 +78,13 @@ class DocumentFormattingAgent:
 
     def apply_list_styles(self):
         """Apply bullet list rules from the configuration."""
-        update_bullet_characters(
+        apply_bullet_character_updates(
             doc=self.doc, 
             list_config=self.config.list_rules, 
             bullet_character_options=MAPING_CONF.BULLET_CHARACTER_OPTIONS,
             w_tags=MAPING_CONF.W_TAGS
         )
-        enforce_chapter_page_breaks(
+        apply_chapter_page_breaks(
             doc=self.doc, 
             style_names_mapping=MAPING_CONF.STYLE_NAMES_MAPPING
         )
@@ -112,11 +112,11 @@ class DocumentFormattingAgent:
         """
         trim_spaces = self.config.document_setup.get("trim_spaces", True)
         for paragraph in self.doc.paragraphs[:]:
-            clean_paragraph(
+            apply_paragraph_cleaning(
                 paragraph=paragraph, 
                 trim_spaces=trim_spaces
             )
-            remove_empty_paragraph(
+            apply_empty_paragraph_removal(
                 paragraph=paragraph
             )
 

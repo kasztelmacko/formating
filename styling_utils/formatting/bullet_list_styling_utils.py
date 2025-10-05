@@ -17,7 +17,7 @@ def apply_list_indentation(level: Element, left: int, hanging: int, w_tags: dict
     ind.set(w_tags['left'], str(left))
     ind.set(w_tags['hanging'], str(hanging))
 
-def update_bullet_characters(doc, list_config: dict, bullet_character_options: dict, w_tags: dict):
+def apply_bullet_character_updates(doc, list_config: dict, bullet_character_options: dict, w_tags: dict):
     """
     Update bullet characters and indentation in the document based on list_config.
     Termination characters are applied later to paragraph text.

@@ -9,9 +9,9 @@ This package provides utilities for formatting Word documents including:
 """
 
 from .core.style_appliers import apply_docx_style_definitions, apply_docx_style_attributes, map_config_to_docx_attributes
-from .formatting.paragraph_cleaning_utils import clean_paragraph, remove_empty_paragraph, is_paragraph_empty
+from .formatting.paragraph_cleaning_utils import apply_paragraph_cleaning, apply_empty_paragraph_removal, is_paragraph_empty
 from .formatting.bullet_list_styling_utils import (
-    update_bullet_characters, 
+    apply_bullet_character_updates, 
     apply_list_termination_characters,
     find_all_list_paragraphs
 )
@@ -24,9 +24,9 @@ from .numbering.numbering_utils import (
     apply_chapter_based_numbering
 )
 from .numbering.chapter_section_styles_utils import (
-    enforce_chapter_page_breaks,
-    adjust_chapter_section_numbering_format,
-    adjust_section_numbering_order
+    apply_chapter_page_breaks,
+    apply_chapter_section_numbering_format,
+    apply_section_numbering_order
 )
 from .content.header_footer_styling_utils import (
     apply_header_footer_styles,
@@ -40,10 +40,10 @@ __all__ = [
     'map_config_to_docx_attributes',
     
     # Formatting utilities
-    'clean_paragraph',
-    'remove_empty_paragraph',
+    'apply_paragraph_cleaning',
+    'apply_empty_paragraph_removal',
     'is_paragraph_empty',
-    'update_bullet_characters',
+    'apply_bullet_character_updates',
     'apply_list_termination_characters',
     'find_all_list_paragraphs',
     'apply_table_figure_styles',
@@ -55,9 +55,9 @@ __all__ = [
     'process_paragraph_text',
     'update_paragraph_numbering',
     'apply_chapter_based_numbering',
-    'enforce_chapter_page_breaks',
-    'adjust_chapter_section_numbering_format',
-    'adjust_section_numbering_order',
+    'apply_chapter_page_breaks',
+    'apply_chapter_section_numbering_format',
+    'apply_section_numbering_order',
     
     # Content utilities
     'apply_header_footer_styles',

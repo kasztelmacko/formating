@@ -1,6 +1,6 @@
 from config import OPENXML_FORMATS
 
-def clean_paragraph(paragraph, trim_spaces=True):
+def apply_paragraph_cleaning(paragraph, trim_spaces=True):
     """
     Trim leading/trailing whitespace/newlines from paragraph text,
     without touching inline objects like images or equations.
@@ -8,7 +8,7 @@ def clean_paragraph(paragraph, trim_spaces=True):
     if trim_spaces and paragraph.text:
         paragraph.text = paragraph.text.lstrip("\n\r ").rstrip("\n\r ")
 
-def remove_empty_paragraph(paragraph):
+def apply_empty_paragraph_removal(paragraph):
     """
     Remove a paragraph only if it is truly empty (no text, no runs, no images/equations).
     """
