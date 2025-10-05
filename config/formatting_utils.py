@@ -5,16 +5,20 @@ This module contains utility functions for formatting operations like color conv
 enum resolution, and other formatting-related utilities.
 """
 
+from typing import Type, TypeVar
+
 from docx.shared import RGBColor
 
+T = TypeVar("T")
 
-def hex_to_rgbcolor(hex_str):
+
+def hex_to_rgbcolor(hex_str: str) -> RGBColor:
     """Convert '#RRGGBB' string into docx RGBColor."""
     hex_str = hex_str.lstrip("#")
     r, g, b = (int(hex_str[i : i + 2], 16) for i in (0, 2, 4))
     return RGBColor(r, g, b)
 
 
-def resolve_enum(enum_class, name):
+def resolve_enum(enum_class: Type[T], name: str) -> T:
     """Get enum value from its name (string)."""
     return getattr(enum_class, name)
