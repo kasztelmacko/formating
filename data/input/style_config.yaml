@@ -54,7 +54,10 @@ document_formatter_config:
 
     subchapter_titles_level_2:
       based_on: main_text
-      common_pattern: "number.number"
+      common_pattern_format:
+        pattern: "number.number"
+        side: LEFT
+        separator: " "
       numbering_format:
         type: ARABIC
         side: LEFT
@@ -70,7 +73,10 @@ document_formatter_config:
 
     subchapter_titles_level_3:
       based_on: main_text
-      common_pattern: "number.number.number"
+      common_pattern_format:
+        pattern: "number.number.number"
+        side: LEFT
+        separator: " "
       numbering_format:
         type: ARABIC
         side: LEFT

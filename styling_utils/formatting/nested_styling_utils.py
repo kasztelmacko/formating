@@ -126,18 +126,23 @@ def apply_pattern_styling_to_paragraph(
     font_mapping: dict[str, tuple[str, Callable | None]],
     pattern_font_format: Optional[dict],
     default_font_format: Optional[dict],
+    numbering_format: str = "ARABIC",
 ) -> None:
     """
     Apply styling to a specific pattern within a paragraph text.
     
-    This function looks for a specific pattern (like "Source") in the paragraph text
-    and applies different font formatting to that pattern vs. the rest of the text.
+    This function looks for a specific pattern (like "Source" or "number.number.number") 
+    in the paragraph text and applies different font formatting to that pattern vs. the rest of the text.
     """
     text = paragraph.text
     if not text or not pattern:
         return
 
-    pattern_match = re.search(re.escape(pattern), text, re.IGNORECASE)
+    if "number" in pattern:
+        expanded_pattern = expand_common_pattern(pattern, numbering_format)
+        pattern_match = re.search(expanded_pattern, text, re.IGNORECASE)
+    else:
+        pattern_match = re.search(re.escape(pattern), text, re.IGNORECASE)
     
     if not pattern_match:
         apply_nested_paragraph_styling(
@@ -230,10 +235,18 @@ def apply_nested_styling_to_paragraphs(
             {},
         )
 
+        # Get numbering format for pattern expansion
+        numbering_def = style_def.get(
+            style_attributes_names_mapping.get("numbering_format", "numbering_format"),
+            {},
+        )
+        numbering_format = numbering_def.get("type", "ARABIC")
+        
         apply_pattern_styling_to_paragraph(
             paragraph=paragraph,
             pattern=common_pattern,
             font_mapping=font_mapping,
             pattern_font_format=common_pattern_font_format,
             default_font_format=default_font_format,
+            numbering_format=numbering_format,
         )
