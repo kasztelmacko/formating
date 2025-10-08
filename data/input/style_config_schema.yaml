@@ -15,6 +15,14 @@ $defs:
           side: { type: [string, "null"] }
           separator: { type: [string, "null"] }
         additionalProperties: false
+      common_pattern_format:
+        type: object
+        properties:
+          pattern: { type: [string, "null"] }
+          side: { type: [string, "null"] }
+          separator: { type: [string, "null"] }
+          font_format: { $ref: "#/$defs/StyleDefinition/properties/font_format" }
+        additionalProperties: false
       paragraph_format:
         type: object
         properties:

@@ -17,6 +17,7 @@ class DocumentFormatterConfig:
         self.chapter_and_section_rules = doc_config.get("chapter_and_section_rules", {})
         self.table_rules = doc_config.get("table_rules", {})
         self.figure_rules = doc_config.get("figure_rules", {})
+        self.source_rules = doc_config.get("source_rules", {})
         self.formula_rules = doc_config.get("formula_rules", {})
         self.list_rules = doc_config.get("list_rules", {})
         self.header_footer_rules = doc_config.get("header_footer_rules", {})

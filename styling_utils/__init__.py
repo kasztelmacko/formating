@@ -47,6 +47,7 @@ from .numbering.numbering_utils import (
     remove_all_numbering,
     update_paragraph_numbering,
 )
+from .formatting.nested_styling_utils import apply_nested_styling_to_paragraphs
 
 __all__ = [
     # Core functionality
@@ -72,6 +73,7 @@ __all__ = [
     "process_paragraph_text",
     "update_paragraph_numbering",
     "apply_chapter_based_numbering",
+    "apply_nested_styling_to_paragraphs",
     "apply_chapter_page_breaks",
     "apply_chapter_section_numbering_format",
     "apply_section_numbering_order",

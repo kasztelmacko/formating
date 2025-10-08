@@ -128,6 +128,13 @@ document_formatter_config:
   source_rules:
     source_text:
       based_on: main_text
+      common_pattern_format:
+        pattern: "Source"
+        side: LEFT
+        separator: " "
+        font_format:
+          italic: true
+          bold: false
       paragraph_format:
         alignment: JUSTIFY
         line_spacing: 1.0
@@ -139,7 +146,7 @@ document_formatter_config:
       font_format:
         name: Times New Roman
         size: 10
-        italic: true
+        italic: false
 
   ## Formula Rules
   formula_rules:

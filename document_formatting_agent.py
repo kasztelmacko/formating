@@ -10,6 +10,7 @@ from styling_utils import (
     apply_empty_paragraph_removal,
     apply_header_footer_to_all_sections,
     apply_list_termination_characters,
+    apply_nested_styling_to_paragraphs,
     apply_paragraph_cleaning,
     apply_section_numbering_order,
     apply_source_styles,
@@ -30,6 +31,7 @@ class DocumentFormattingAgent:
         self.apply_source_styles()
         self.apply_list_styles()
         self.apply_header_footer_styles()
+        self.apply_nested_styling()
 
     def apply_paragraph_styles(self):
         """Apply paragraph styles from the configuration."""
@@ -122,6 +124,26 @@ class DocumentFormattingAgent:
             field_mappings=MAPPING_CONF.HEADER_FOOTER_FIELD_MAPPINGS,
             font_mapping=MAPPING_CONF.FONT_MAPPING,
             layout_config=MAPPING_CONF.HEADER_FOOTER_LAYOUT_CONFIG,
+        )
+
+    def apply_nested_styling(self):
+        """Apply nested styling to paragraphs with common_pattern_format font formatting."""
+        all_style_definitions = {}
+        all_style_definitions.update(self.config.chapter_and_section_rules)
+        all_style_definitions.update(self.config.source_rules)
+
+        if hasattr(self.config, 'table_rules') and self.config.table_rules:
+            all_style_definitions.update(self.config.table_rules)
+
+        if hasattr(self.config, 'figure_rules') and self.config.figure_rules:
+            all_style_definitions.update(self.config.figure_rules)
+
+        apply_nested_styling_to_paragraphs(
+            doc=self.doc,
+            style_names_mapping=MAPPING_CONF.STYLE_NAMES_MAPPING,
+            font_mapping=MAPPING_CONF.FONT_MAPPING,
+            style_definitions=all_style_definitions,
+            style_attributes_names_mapping=MAPPING_CONF.STYLE_ATTRIBUTES_NAMES_MAPPING,
         )
 
     def clean_paragraphs(self):

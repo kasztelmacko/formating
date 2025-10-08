@@ -1,5 +1,5 @@
 import re
-from typing import Pattern
+from typing import Callable, Pattern
 
 import roman
 from docx.document import Document
@@ -250,7 +250,7 @@ def apply_chapter_based_numbering(
 ) -> dict[str, int]:
     """Apply chapter-based numbering for specified styles."""
     current_chapter = 0
-    counters = {style: 0 for style in target_styles} if target_styles else {}
+    counters = dict.fromkeys(target_styles, 0) if target_styles else {}
 
     in_chapter = False
     chapter_numbering_applied = False
